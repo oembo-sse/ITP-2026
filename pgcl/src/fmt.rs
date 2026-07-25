@@ -47,8 +47,9 @@ impl std::fmt::Display for Expr {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self.kind.as_ref() {
             ExprKind::Var(var) => write!(f, "{}", var.text),
-            ExprKind::Num(num) => write!(f, "{}", num),
-            ExprKind::Op(l, op, r) => write!(f, "({} {} {})", l, op, r),
+            ExprKind::Minus(e) => write!(f, "-{e}"),
+            ExprKind::Num(num) => write!(f, "{num}"),
+            ExprKind::Op(l, op, r) => write!(f, "({l} {op} {r})"),
         }
     }
 }
@@ -137,6 +138,7 @@ impl Expr {
         match self.kind.as_ref() {
             ExprKind::Var(var) => var.text.clone(),
             ExprKind::Num(num) => num.to_string(),
+            ExprKind::Minus(num) => format!("-{}", num.to_string()),
             ExprKind::Op(l, op, r) if self.has_paren => {
                 format!(r"({} {} {})", l.tex(), op.tex(), r.tex())
             }
@@ -151,7 +153,7 @@ impl ExprOp {
             ExprOp::Sub => "-".to_string(),
             ExprOp::Mul => r"*".to_string(),
             ExprOp::Div => r"/".to_string(),
-            ExprOp::Pow => r"\^".to_string(),
+            ExprOp::Pow => r"\^{}".to_string(),
         }
     }
 }

@@ -5,6 +5,28 @@ import { grammar, operationalSemantics } from "../semantics";
 import { tex, text } from "../Katex";
 import React from "react";
 import { H } from "../common";
+import { LeanCode } from "../CodeEditor";
+
+const smallStepCode = `
+/-- Probabilistic small step operational semantics for \`pGCL\` -/
+@[aesop safe [constructors, cases], grind]
+inductive Step : Conf₀ Γ → Act → ENNReal → Conf₁ Γ → Prop where
+  | skip     : Step conf₀[skip, σ] N 1 conf₁[⇓, σ]
+  | assign   : Step conf₀[x := e, σ] N 1 conf₁[⇓, σ[x ↦ e σ]]
+  | prob     : Step conf₀[{C} [p] {C}, σ] N 1 conf₁[C, σ]
+  | probL    : ¬C₁ = C₂ → 0 < p σ → Step conf₀[{C₁} [p] {C₂}, σ] N (p σ) conf₁[C₁, σ]
+  | probR    : ¬C₁ = C₂ → p σ < 1 → Step conf₀[{C₁} [p] {C₂}, σ] N (1 - p σ) conf₁[C₂, σ]
+  | nonDetL  : Step conf₀[{C₁} [] {C₂}, σ] L 1 conf₁[C₁, σ]
+  | nonDetR  : Step conf₀[{C₁} [] {C₂}, σ] R 1 conf₁[C₂, σ]
+  | tick     : Step conf₀[tick(r), σ] N 1 conf₁[⇓, σ]
+  | observe₁ :  b σ → Step conf₀[observe(b), σ] N 1 conf₁[⇓, σ]
+  | observe₂ : ¬b σ → Step conf₀[observe(b), σ] N 1 conf₁[↯, σ]
+  | seqL : Step conf₀[C₁, σ] α p conf₁[⇓, τ]  → Step conf₀[C₁; C₂, σ] α p conf₁[C₂, τ]
+  | seqR : Step conf₀[C₁, σ] α p conf₁[C', τ] → Step conf₀[C₁; C₂, σ] α p conf₁[C'; C₂, τ]
+  | seqF : Step conf₀[C₁, σ] N 1 conf₁[↯, σ]  → Step conf₀[C₁; C₂, σ] N 1 conf₁[↯, σ]
+  | loop  : ¬b σ → Step conf₀[while b {C}, σ] N 1 conf₁[⇓, σ]
+  | loop' :  b σ → Step conf₀[while b {C}, σ] N 1 conf₁[C; while b {C}, σ]
+`;
 
 const steps = [
   <div className="text-3xl">
@@ -26,8 +48,9 @@ const steps = [
         >
           {op}
         </div>
-      )
+      ),
   ),
+  <LeanCode src={smallStepCode} />,
 ];
 
 export const s02 = makeSlide(steps.length + 1, () => {

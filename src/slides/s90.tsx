@@ -3,6 +3,7 @@ import { makeSlide } from "../hooks";
 import { appear, useSlide } from "../slides";
 
 import DTU from "../assets/DTU2.png";
+import OLDENBURG from "../assets/oldenburg.svg";
 import { H } from "../common";
 
 export const s90 = makeSlide(1, () => {
@@ -22,13 +23,29 @@ export const s90 = makeSlide(1, () => {
             ))}
           </AnimatePresence>
         </ul> */}
-        <appear.div to={1} exit className="text-5xl mt-20">
-          Oliver Emil Bøving
+        <appear.div to={1} exit className="text-5xl mt-32 flex gap-8">
+          <span>
+            Oliver Emil Bøving<sup>1</sup>
+          </span>
+          <span>
+            Christoph Matheja<sup>2,1</sup>
+          </span>
+        </appear.div>
+        <appear.div to={1} exit className="text-4xl mt-32">
+          <div>
+            <sup>1</sup>: Technical University of Denmark, Lyngby, Denmark
+          </div>
+          <div>
+            <sup>2</sup>: University of Oldenburg, Germany
+          </div>
         </appear.div>
         <appear.div to={1} exit className="text-3xl mt-10 text-center">
-          As part of DFF project AuRoRA <br /> with Christoph Matheja
+          Funded by DFF project AuRoRA
         </appear.div>
-        <appear.img to={1} src={DTU} className="w-12 mt-10" />
+        <appear.div className="flex gap-10">
+          <appear.img to={1} src={DTU} className="w-12 mt-10" />
+          <appear.img to={1} src={OLDENBURG} className="w-32 mt-10" />
+        </appear.div>
       </AnimatePresence>
     </div>
   );

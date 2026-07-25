@@ -6,7 +6,7 @@ import wasmPack from "./wasm-pack-plugin";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/ROCKS-2025/",
+  base: "/ITP-2026/",
   plugins: [
     topLevelAwait(),
     react(),

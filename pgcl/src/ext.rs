@@ -45,6 +45,7 @@ impl Expr {
     pub fn fv(&self) -> BTreeSet<String> {
         match self.kind.as_ref() {
             ExprKind::Var(var) => [var.text.clone()].into(),
+            ExprKind::Minus(e) => e.fv(),
             ExprKind::Num(_) => BTreeSet::new(),
             ExprKind::Op(l, _, r) => l.fv().iter().chain(&r.fv()).cloned().collect(),
         }

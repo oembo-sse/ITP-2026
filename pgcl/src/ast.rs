@@ -108,6 +108,7 @@ pub struct Expr {
 pub enum ExprKind {
     Var(Var),
     Num(i64),
+    Minus(Expr),
     Op(Expr, ExprOp, Expr),
 }
 

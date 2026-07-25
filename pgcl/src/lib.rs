@@ -1,6 +1,7 @@
 mod ast;
 mod ext;
 mod fmt;
+mod lean;
 mod parse;
 mod pgcl;
 mod utils;
@@ -341,6 +342,7 @@ impl Expr {
         match self.kind.as_ref() {
             ExprKind::Var(var) => mem.get(&var.text).copied().unwrap_or(ZERO).0,
             ExprKind::Num(num) => *num as _,
+            ExprKind::Minus(e) => -e.eval(mem),
             ExprKind::Op(l, op, r) => match op {
                 ast::ExprOp::Add => l.eval(mem) + r.eval(mem),
                 ast::ExprOp::Sub => l.eval(mem) - r.eval(mem),
@@ -382,6 +384,11 @@ pub fn highlight_pgcl(src: &str) -> Highlighted {
         })
         .collect();
     Highlighted { tokens }
+}
+
+#[wasm_bindgen]
+pub fn highlight_lean(src: &str) -> Highlighted {
+    lean::LeanSyntax::get().highlight(src).unwrap()
 }
 
 fn highlight(src: &str) -> Vec<(&str, TokenType)> {

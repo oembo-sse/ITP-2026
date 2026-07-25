@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 export const makeSlide = (
   steps: number,
-  render: (step: number) => React.ReactNode
+  render: (step: number) => React.ReactNode,
 ) => {
   return { steps, render: ({ step }: { step: number }) => render(step) };
 };
@@ -29,7 +29,7 @@ export const buildSlides = (
   inputSlides: {
     steps: number;
     render: (props: { step: number }) => React.ReactNode;
-  }[]
+  }[],
 ): Slides => {
   let current = 0;
   const slides = inputSlides.map((slide): Slide => {
@@ -42,7 +42,7 @@ export const buildSlides = (
     totalSteps: slides.reduce((sum, s) => sum + s.steps, 0),
     getCurrentSlide: (index: number) => {
       let currentSlideIndex = slides.findIndex(
-        (slide) => slide.from <= index && index < slide.to
+        (slide) => slide.from <= index && index < slide.to,
       );
       if (currentSlideIndex == -1) currentSlideIndex = slides.length - 1;
       const currentSlide = slides[currentSlideIndex];
@@ -67,7 +67,7 @@ function getStorageValue<T>(key: string, defaultValue: T): T {
 
 export function useLocalStorage<T>(
   key: string,
-  defaultValue: T
+  defaultValue: T,
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [value, setValue] = useState(() => {
     return getStorageValue(key, defaultValue);

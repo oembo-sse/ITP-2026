@@ -78,7 +78,7 @@ type TreeNode<T> = {
 function buildTree<T>(
   tree: Tree<T>,
   id: number,
-  parent?: number
+  parent?: number,
 ): TreeNode<T>[] {
   let curIdx = id + 1;
   let curX = 1;
@@ -150,6 +150,15 @@ const HEIGHT = 10 / 10;
 const WIDTH_GAP = WIDTH + 5;
 const HEIGHT_GAP = HEIGHT + 3;
 
+type Mode =
+  | ""
+  | "auto-unfold"
+  | "root-to-mark"
+  | "cover-to-mark"
+  | "requires"
+  | "leafs"
+  | "auto-fold";
+
 export function RenderTree<T>({
   tree: initialTree,
   mode,
@@ -157,7 +166,7 @@ export function RenderTree<T>({
   renderNode,
 }: {
   tree: Tree<T>;
-  mode: string;
+  mode: Mode;
   onClick?: (key: string[], data: T) => void;
   renderNode?: (data: T, opts: { isOpen: boolean }) => ReactNode;
 }) {
@@ -306,7 +315,7 @@ export function RenderTree<T>({
                   />
                 )}
               </React.Fragment>
-            )
+            ),
         )}
         {d.map(
           (t) =>
@@ -323,7 +332,7 @@ export function RenderTree<T>({
                   renderNode={renderNode}
                 />
               </React.Fragment>
-            )
+            ),
         )}
       </LayoutGroup>
     </motion.svg>
@@ -340,7 +349,7 @@ function RenderNode<T>({
 }: {
   t: TreeNode<T>;
   minX: number;
-  mode: string;
+  mode: Mode;
   d: TreeNode<T>[];
   onClick: ((key: string[], data: T) => void) | undefined;
   renderNode?: (data: T, opts: { isOpen: boolean }) => ReactNode;
@@ -498,7 +507,7 @@ function RenderNode<T>({
 export function useInterval(
   callback: () => void,
   delay: number | null,
-  deps: any[] = []
+  deps: unknown[] = [],
 ) {
   const savedCallback = useRef(callback);
 
@@ -526,7 +535,7 @@ export function useInterval(
 
 function layout<T>(
   t: TreeNode<T>[],
-  cutMarkedChildren: boolean
+  cutMarkedChildren: boolean,
 ): TreeNode<T>[] {
   const computeEdges = (idx: number): [number[], number[]] => {
     if (t[idx].children.length == 0) {

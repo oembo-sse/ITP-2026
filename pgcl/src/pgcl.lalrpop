@@ -45,11 +45,12 @@ pub Expr: Expr = {
     #[precedence(level = "0")]
     <l:@L> <v:Var> <r:@R> => Expr::parsed(l, r, ExprKind::Var(v)),
     <l:@L> <v:Int> <r:@R> => Expr::parsed(l, r, ExprKind::Num(v)),
+    <l:@L> "-" <e:Expr> <r:@R> => Expr::parsed(l, r, ExprKind::Minus(e)),
     <l:@L> "(" <mut e:Expr_> ")" <r:@R> => {
         e.has_paren = true;
         e
     },
-    #[precedence(level = "1")] #[assoc(side = "right")]
+    #[precedence(level = "1")] #[assoc(side = "left")]
     <l:@L> <e1:Expr> "^" <e2:Expr> <r:@R> => Expr::parsed(l, r, ExprKind::Op(e1, ExprOp::Pow, e2)),
     #[precedence(level = "2")] #[assoc(side = "right")]
     <l:@L> <e1:Expr> "*" <e2:Expr> <r:@R> => Expr::parsed(l, r, ExprKind::Op(e1, ExprOp::Mul, e2)),

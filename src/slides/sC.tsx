@@ -3,6 +3,7 @@ import { s } from "../nodes";
 import { Network, rewardNode } from "../Network";
 import { tex } from "../Katex";
 import { appear, useSlide } from "../slides";
+import { H } from "../common";
 
 type State = {
   basic?: boolean;
@@ -31,6 +32,7 @@ type State = {
   compL?: ("eq?" | "eqSum" | "eq1")[];
   showP?: boolean;
   showS?: number;
+  showBellman?: ("def" | "instance" | "lfp?")[];
 };
 
 const sequence: State[] = [
@@ -48,17 +50,17 @@ const sequence: State[] = [
   // { basic: false, compG: ["ECG", "sup", "inf", "eq?"] },
   { basic: false, compG: ["ECG", "sup", "eq?"] },
   { compG: ["ECG", "sup", "inf", "eq?"] },
-  { compG: ["ECH", "sup", "infH", "eq?", "history"] },
-  { ECDef: "extended" },
-  { compL: ["eq?"] },
+  { compG: ["ECH", "sup", "infH", "eq?", "history"], compL: ["eq?"] },
   { compL: ["eqSum"] },
   { compL: ["eqSum", "eq1"] },
-  { ECDef: "just" },
-  { showP: true },
-  { showS: 1 },
-  { showS: 2 },
-  { showS: 3 },
-  { showS: 4 },
+  { compL: ["eq1"] },
+  // { ECDef: "extended" },
+  // { ECDef: "just" },
+  // { showP: true },
+  // { showS: 1 },
+  // { showS: 2 },
+  // { showS: 3 },
+  // { showS: 4 },
   { compG: ["ECH", "sup", "infH", "eq12", "history"] },
   { showGt: true },
   {
@@ -68,9 +70,13 @@ const sequence: State[] = [
     ECDef: void 0,
     compL: ["eq1"],
   },
+  { compG: void 0, compL: void 0, showGt: void 0 },
+  { showBellman: ["def"] },
+  { showBellman: ["def", "instance"] },
+  { showBellman: ["def", "instance", "lfp?"] },
 ];
 
-const s2 = String.raw`{\color{${rewardNode.color}}{s_2}}`;
+const s2 = String.raw`{\htmlClass{text-McS-600}{s_2}}`;
 
 const p = (a: string) => String.raw`2^{-2^{-${a}}}`;
 
@@ -104,17 +110,43 @@ export const sC = makeSlide(sequence.length, () => {
       <div className="text-3xl mt-20 flex gap-16 items-center">
         <appear.div className="flex flex-col items-center">
           <appear.div
-            show={state.compG?.includes("history")}
+            show={!!state.compL && state.compG?.includes("history")}
             className="text-4xl tracking-wide text-McS-500"
           >
             With history
+          </appear.div>
+          <appear.div className="flex gap-2 items-center" show={!!state.compL}>
+            <appear.span>{tex`\iInf_{\McS \mem \MfS}`}</appear.span>
+            <appear.span>{tex`\iSup_{n \mem \N}`} </appear.span>
+            <appear.span>{tex`\EC{n}{\McS}(s_1)`}</appear.span>
+            <appear.span show={state.compG?.includes("eq?")}>
+              {tex`= ?`}
+            </appear.span>
+            <appear.span show={state.compG?.includes("eq12")}>
+              {/* {tex`\le \dfrac{1}{2}`} */}
+              {tex`\le \varepsilon`}
+            </appear.span>
+          </appear.div>
+        </appear.div>
+
+        <appear.div show={state.showGt}>
+          <div className="text-transparent select-none text-4xl">F</div>
+          {tex`<`}
+        </appear.div>
+
+        <appear.div className="flex flex-col items-center">
+          <appear.div
+            show={state.compG?.includes("history")}
+            className="text-4xl tracking-wide text-McL-500"
+          >
+            Without history
           </appear.div>
           <appear.div className="flex gap-2 items-center">
             <appear.span show={state.compG?.includes("inf")}>
               {tex`\iInf_{\McG \mem \MfG}`}
             </appear.span>
             <appear.span show={state.compG?.includes("infH")}>
-              {tex`\iInf_{\McS \mem \MfS}`}
+              {tex`\iInf_{\McL \mem \MfL}`}
             </appear.span>
             <appear.span show={state.compG?.includes("sup")}>
               {tex`\iSup_{n \mem \N}`}{" "}
@@ -123,37 +155,11 @@ export const sC = makeSlide(sequence.length, () => {
               {tex`\EC{n}{\McG}(s_1)`}
             </appear.span>
             <appear.span show={state.compG?.includes("ECH")}>
-              {tex`\EC{n}{\McS}(s_1)`}
+              {tex`\EC{n}{\McL}(s_1)`}
             </appear.span>
             <appear.span show={state.compG?.includes("eqSum")}>
               {tex`~=~ \displaystyle \sum_{i = 1} \dfrac{1}{2^i}`}
             </appear.span>
-            <appear.span show={state.compG?.includes("eq1")}>
-              {tex`= 1`}
-            </appear.span>
-            <appear.span show={state.compG?.includes("eq?")}>
-              {tex`= ?`}
-            </appear.span>
-            <appear.span show={state.compG?.includes("eq12")}>
-              {tex`\le \dfrac{1}{2}`}
-            </appear.span>
-          </appear.div>
-        </appear.div>
-        <appear.div show={state.showGt}>
-          <div className="text-transparent select-none text-4xl">F</div>
-          {tex`<`}
-        </appear.div>
-        <appear.div className="flex flex-col items-center">
-          <appear.div
-            show={!!state.compL && state.compG?.includes("history")}
-            className="text-4xl tracking-wide text-McL-500"
-          >
-            Without history
-          </appear.div>
-          <appear.div className="flex gap-2 items-center" show={!!state.compL}>
-            <appear.span>{tex`\iInf_{\McL \mem \MfL}`}</appear.span>
-            <appear.span>{tex`\iSup_{n \mem \N}`} </appear.span>
-            <appear.span>{tex`\EC{n}{\McL}(s_1)`}</appear.span>
             <appear.span show={state.compL?.includes("eqSum")}>
               {tex`~=~ \iInf_{\McL \mem \MfL} \displaystyle \sum_{i = 1} p(\McL(s_1))^i`}
             </appear.span>
@@ -188,6 +194,44 @@ export const sC = makeSlide(sequence.length, () => {
         <appear.span
           show={typeof state.showS == "number" && 3 < state.showS}
         >{tex`\McS(${"\\"}underbrace{s_1 \dots s_1}_{i \text{ times}}) = i`}</appear.span>
+      </appear.div>
+
+      <appear.div
+        show={!!state.showBellman}
+        className="mt-16 text-3xl flex flex-col items-center gap-4"
+      >
+        <appear.div className="text-5xl">
+          <H>Bellman operator</H>
+        </appear.div>
+        <appear.div className="grid grid-cols-[auto_auto] gap-2">
+          <appear.span
+            show={state.showBellman?.includes("def")}
+          >{tex`\Bell(v)(s)`}</appear.span>
+          <appear.span
+            show={state.showBellman?.includes("def")}
+          >{tex`= c(s) + {\iInf_\alpha} \sum_{s'} P(s, \alpha, s') \cdot v(s')`}</appear.span>
+          <appear.span
+            show={state.showBellman?.includes("instance")}
+          ></appear.span>
+          <appear.span
+            show={state.showBellman?.includes("instance")}
+          >{tex`= \begin{cases}
+            {\iInf_\alpha} \; \left[ p(\alpha) \cdot v(s_1) + (1 - p(\alpha)) \cdot v(${s2}) \right] & \text{if } s = s_1 \\\\
+            \\htmlClass{text-McS-600}{1} + v(s_3) & \text{if } s = ${s2} \\\\
+            v(s_3) & \text{if } s = s_3 \\\\
+            \end{cases}
+          `}</appear.span>
+        </appear.div>
+
+        <appear.div show={state.showBellman?.includes("lfp?")}>
+          <appear.span>
+            Solution of system of equation as a least fixed-point
+          </appear.span>
+          <appear.div>{tex`\lfp \Bell`}</appear.div>
+        </appear.div>
+        <appear.div show={state.showBellman?.includes("lfp?")}>
+          {tex`(\lfp \Bell)(s) = \iInf_{\McS} \iSup_n \EC{n}{\McS}(s)`}
+        </appear.div>
       </appear.div>
 
       <appear.div className="h-[20vw] w-[80vw]">

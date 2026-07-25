@@ -20,6 +20,10 @@ itertools = "0.13.0"
 tracing = "0.1.40"
 tracing-wasm = "0.2.1"
 logos = "0.14.0"
+syntect = { version = "5.3.0", default-features = false, features = [
+    "default-fancy",
+] }
+color-eyre = "0.6.5"
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.

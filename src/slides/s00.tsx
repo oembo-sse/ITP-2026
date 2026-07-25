@@ -8,7 +8,7 @@ import { CodeEditor } from "../CodeEditor";
 
 export const s00 = (
   initialProgram: string,
-  initialExprs: [string, string] = ["sent", "tick"]
+  initialExprs: [string, string] = ["sent", "tick"],
 ) =>
   makeSlide(1, () => {
     const [src, setSrc] = useState(
@@ -25,12 +25,12 @@ export const s00 = (
       //   { fail := 0 ; sent := sent + 1 } [1/2]
       //   { fail := fail + 1 }
       // }`
-      initialProgram
+      initialProgram,
     );
 
     const [_file, exe] = useMemo((): [
       pgcl.File | null,
-      pgcl.Execution | null
+      pgcl.Execution | null,
     ] => {
       const file = pgcl.parse(src);
       if (file) {
@@ -52,7 +52,7 @@ export const s00 = (
         console.timeEnd("tree");
       },
       100,
-      [exe]
+      [exe],
     );
 
     return (
@@ -77,7 +77,7 @@ export const s00 = (
             }}
             renderNode={(d) => (
               <div className="p-2 bg-white border rounded text-2xl">{tex`${exe?.data(
-                d
+                d,
               )}`}</div>
             )}
           />
@@ -101,7 +101,7 @@ const Samples = ({
 
   const { samples, weights } = useMemo(
     () => (exe ? exe.sample(expr) : { samples: [], weights: [] }),
-    [expr, exe, tree]
+    [expr, exe, tree],
   );
 
   return (
@@ -174,7 +174,7 @@ const Histogram = ({
 
   const weightedMean = samples.reduce(
     (a, b, i) => a + b * (weights?.[i] ?? 1),
-    0
+    0,
   );
 
   return (

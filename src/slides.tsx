@@ -10,6 +10,7 @@ export type AppearProps = {
   exit?: boolean;
   className?: string;
   src?: string;
+  id?: string;
   children?: React.ReactNode | React.ReactNode[];
 };
 
@@ -23,6 +24,7 @@ const deriveProps = (props: AppearProps) => {
     children,
     className,
     src,
+    id: props.id,
   } as const;
 };
 

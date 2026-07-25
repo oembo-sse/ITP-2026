@@ -19,15 +19,15 @@ export const Network = React.memo(
 
     const nodes = React.useMemo(
       () => props.nodes.map((n) => ({ ...n })),
-      [props.nodes]
+      [props.nodes],
     );
     const edges = React.useMemo(
       () => props.edges.map((e) => ({ ...e })),
-      [props.edges]
+      [props.edges],
     );
     const highlighted = React.useMemo(
       () => props.highlighted ?? [],
-      [props.highlighted]
+      [props.highlighted],
     );
 
     let [networkRef, setNetworkRef] = React.useState<vis.Network | null>(null);
@@ -49,7 +49,7 @@ export const Network = React.memo(
                 img.onload = res;
                 img.src = n.image as string;
               });
-          })
+          }),
         );
 
         const vis = await visPromise;
@@ -77,7 +77,7 @@ export const Network = React.memo(
               color: "lightgray",
             },
             // autoResize: true,
-          }
+          },
         );
         setNetworkRef(network);
 
@@ -104,6 +104,6 @@ export const Network = React.memo(
 
     return <div className="h-full w-full" ref={setContainer}></div>;
   }),
-  (a, b) => deepEqual(a, b)
+  (a, b) => deepEqual(a, b),
 );
 Network.displayName = "Network";
