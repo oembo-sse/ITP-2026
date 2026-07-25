@@ -1,30 +1,21 @@
-# React + TypeScript + Vite
+# Presentation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Requirements
 
-Currently, two official plugins are available:
+- [Rust](https://rust-lang.org/)
+- [cargo-watch](https://github.com/watchexec/cargo-watch): `cargo install cargo-watch`
+- [wasm-pack](https://wasm-bindgen.github.io/wasm-pack/)
+- [just](https://github.com/casey/just): `cargo install just`
+- [nvm/node/npm](https://nodejs.org/en/download)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Developing
 
-## Expanding the ESLint configuration
+Open the project in vscode, and visit `App.tsx`. It contains the list of slides where one can go and edit their contents.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+just wasm
+npm install
+npm run dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Visit [http://localhost:5173/ITP-2026/](http://localhost:5173/ITP-2026/) in the browser.
