@@ -12,6 +12,7 @@ type NetworkProps = {
   nodes: vis.Node[];
   edges: vis.Edge[];
   highlighted?: string[];
+  full?: boolean;
 };
 export const Network = React.memo(
   React.forwardRef<vis.Network, NetworkProps>((props, ref) => {
@@ -30,7 +31,9 @@ export const Network = React.memo(
       [props.highlighted],
     );
 
-    let [networkRef, setNetworkRef] = React.useState<vis.Network | null>(null);
+    const [networkRef, setNetworkRef] = React.useState<vis.Network | null>(
+      null,
+    );
 
     React.useEffect(() => {
       if (!container) return;
@@ -83,6 +86,9 @@ export const Network = React.memo(
 
         network.on("stabilized", () => {
           network.fit({ animation: false, maxZoomLevel: 5 });
+          setTimeout(() => {
+            network.fit({ animation: false, maxZoomLevel: 5 });
+          }, 10);
         });
 
         if (ref)
@@ -102,7 +108,12 @@ export const Network = React.memo(
       networkRef.setSelection({ nodes: highlighted });
     }, [networkRef, highlighted]);
 
-    return <div className="h-full w-full" ref={setContainer}></div>;
+    return (
+      <div
+        className={props.full ? "h-full w-full" : ""}
+        ref={setContainer}
+      ></div>
+    );
   }),
   (a, b) => deepEqual(a, b),
 );

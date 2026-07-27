@@ -8,7 +8,7 @@ import { s00 } from "./slides/s00";
 import { s90 } from "./slides/s90";
 import { s10 } from "./slides/s10";
 import { sA } from "./slides/sA";
-import { sC } from "./slides/sC";
+import { sC, sequenceA, sequenceB } from "./slides/sC";
 import { sRels } from "./slides/sRels";
 import { sLean } from "./slides/sLean";
 import { H } from "./common";
@@ -17,6 +17,8 @@ import { s02 } from "./slides/s02";
 import { s09, sZoo, sZooSoundness } from "./slides/s09";
 import { sMdp } from "./slides/sMdp";
 import { sOMdp } from "./slides/sOMdp";
+import React from "react";
+import { sMarkovChains } from "./slides/sMarkovChains";
 
 const Domain = ({
   id,
@@ -70,8 +72,8 @@ const sConnection = (
       pGCL_op: 3 - start,
       pGCL_wp: 4 - start,
       HeyVL: 5 - start,
-      MDP: 1 - start,
-      MC: 2 - start,
+      MDP: 2 - start,
+      MC: 1 - start,
     };
 
     return (
@@ -81,7 +83,7 @@ const sConnection = (
         </appear.div>
         <div className="grid gap-2 text-center grid-cols-[repeat(9,auto)] items-center">
           <div>
-            <Domain from={n.MC}>Markov Chain</Domain>
+            <Domain from={n.MC}>Markov Chains</Domain>
             <Description from={n.MC}>
               Underlying <br /> probability model
             </Description>
@@ -174,8 +176,226 @@ const sHeyVL = makeSlide(1, () => {
   );
 });
 
+const Cite = ({
+  children,
+}: {
+  children: React.ReactNode | React.ReactNode[];
+}) => {
+  return <span className="flex-nowrap">{children}</span>;
+};
+
+const sMotivation = makeSlide(1, () => {
+  return (
+    <appear.div className="w-[120ch] gap-4 flex flex-col">
+      <h1 className="text-4xl flex justify-between">
+        <H>Verification techniques for reasoning about PPs</H>{" "}
+        <H>(incomplete)</H>
+      </h1>
+      <div>
+        <h2 className="text-3xl mb-1">Expectation transformers</h2>
+        <p className="text-2xl flex flex-wrap gap-x-2">
+          <Cite>[Kozen 1983]</Cite>
+          <Cite>[McIver & Morgan 2005]</Cite>
+          <Cite>[Kaminski et al., 2018]</Cite>
+          <Cite>[Batz et al., 2020-2025]</Cite>
+          <Cite>[Enea et al. 2026] ...</Cite>
+        </p>
+      </div>
+      <div>
+        <h2 className="text-3xl mb-1">Supermartingales</h2>
+        <p className="text-2xl flex flex-wrap gap-x-2">
+          <Cite>[Chakarov et al. 2013]</Cite>
+          <Cite>[Chatterjee et al. 2017-2025]</Cite>
+          <Cite>[McIver et al. 2017]</Cite>
+          <Cite>[Takisaka et al. 2021]</Cite>
+          <Cite>[Abate et al. 2024, 2025] ...</Cite>
+        </p>
+      </div>
+      <div>
+        <h2 className="text-3xl mb-1">Probabilistic Hoare logics</h2>
+        <p className="text-2xl flex flex-wrap gap-x-2">
+          <Cite>[den Hartog 2002]</Cite>
+          <Cite>[Barthe et al. 2016-2025]</Cite>
+          <Cite>[Bao et al. 2025]</Cite>
+          <Cite>[Aguirre et al. 2023-2026]</Cite> ...
+        </p>
+      </div>
+    </appear.div>
+  );
+});
+
+const sCaesarOverview = makeSlide(5, () => {
+  const n = {
+    rules: 1,
+    heyvl: 0,
+    smt: 2,
+    storm: 3,
+    lean: 4,
+  };
+
+  return (
+    <div>
+      <appear.div className="mb-10">
+        <H className="text-5xl">
+          Caesar(12): A Verification Infrastructure for PPs
+        </H>
+      </appear.div>
+
+      <div className="text-3xl grid grid-cols-3 gap-x-4 gap-y-1 text-center [&>*]:p-4 w-[80ch]">
+        <appear.div
+          from={n.rules}
+          className="grid grid-rows-3 grid-flow-col gap-2 border col-span-full"
+        >
+          <div>supermartingales</div> <div>k-induction</div> <div>...</div>
+          <div>(P)AST rules</div> <div>sensitivity analysis</div> <div>...</div>
+          <div>Opt. Stop. Time rules</div> <div>[Enea et al. 2026]</div>{" "}
+          <div>...</div>
+        </appear.div>
+
+        <appear.div from={n.rules} className="col-start-2">
+          {tex`\Downarrow`}
+          <span className="absolute ml-4">Encoding</span>
+        </appear.div>
+
+        <appear.div from={n.heyvl} className="grid border col-span-full">
+          Quantitative Intermediate Verification Language <br /> (HeyVL)
+        </appear.div>
+
+        <appear.div from={n.smt}>{tex`\Downarrow`}</appear.div>
+        <appear.div from={n.storm}>{tex`\Downarrow`}</appear.div>
+        <appear.div from={n.lean}>{tex`\Downarrow`}</appear.div>
+
+        <appear.div from={n.smt} className="border row-start-5">
+          Verif. Cond. Generator <br /> (SMT)
+        </appear.div>
+        <appear.div from={n.storm} className="border row-start-5">
+          Prob. Model Checking <br /> (Storm)
+        </appear.div>
+        <appear.div from={n.lean} className="border row-start-5">
+          Interactive Proofs <br /> (Lean) HIGHLIGHT!!!
+        </appear.div>
+      </div>
+    </div>
+  );
+});
+
+const sCaesarProofRules = makeSlide(1, () => {
+  const things: [string, { name: string; source: string }[]][] = [
+    [
+      "LPROB",
+      [
+        { name: "wlp + Park induction", source: "McIver & Morgan, 2005" },
+        { name: "wlp + latticed k-induction", source: "Schröer, OOPSLA 2023" },
+      ],
+    ],
+
+    [
+      "UEXP",
+      [
+        { name: "wp + Park induction", source: "McIver & Morgan, 2005" },
+        { name: "wp + latticed k-induction", source: "Batz et al., CAV 2021" },
+      ],
+    ],
+
+    [
+      "LEXP",
+      [
+        { name: "wp + ω-invariants", source: "Kaminski, 2019" },
+        { name: "wp + Optional Stopping Theorem", source: "Hark et al., 2019" },
+      ],
+    ],
+
+    ["CEXP", [{ name: "wp + conditioning", source: "Olmedo et al., 2018" }]],
+
+    [
+      "LERT",
+      [
+        {
+          name: "ert calculus + ω-invariants",
+          source: "Kaminski et al., ESOP 2016",
+        },
+      ],
+    ],
+
+    [
+      "AST",
+      [{ name: "parametric super-martingales", source: "McIver et al., 2018" }],
+    ],
+
+    [
+      "PAST",
+      [
+        {
+          name: "program analysis with martingales",
+          source: "Chakarov & Sankaranarayanan, 2013",
+        },
+      ],
+    ],
+
+    [
+      "UEXP",
+      [
+        {
+          name: "new rule for continuous distributions",
+          source: "Batz et al., 2025",
+        },
+      ],
+    ],
+
+    [
+      "AST",
+      [
+        {
+          name: "new rule for distributed systems",
+          source: "Enea et al., 2026",
+        },
+      ],
+    ],
+  ];
+
+  return (
+    <div>
+      <h1 className="text-5xl mb-10">
+        <H>Proof rules that have been automated with Caesar</H>
+      </h1>
+      <div className="grid grid-cols-[auto_auto_auto] gap-x-8 gap-y-1 text-3xl">
+        <h2>
+          <H>Problem</H>
+        </h2>
+        <h2>
+          <H>Verification Technique</H>
+        </h2>
+        <h2>
+          <H>Source</H>
+        </h2>
+
+        {things.map(([problem, thing]) => (
+          <React.Fragment>
+            <div className="col-span-full mt-1 border-t"></div>
+            <div
+              className="col-start-1"
+              style={{
+                gridRow: `span ${thing.length} / span ${thing.length}`,
+              }}
+            >
+              {problem}
+            </div>
+            {thing.map((t) => (
+              <React.Fragment>
+                <div>{t.name}</div>
+                <div>[{t.source}]</div>
+              </React.Fragment>
+            ))}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+});
+
 const SLIDES = buildSlides([
   sIntro,
+  // random walk infinite ast but ert = \infty, subtle
   s04,
   s00(
     `x := 5 ;
@@ -193,12 +413,30 @@ while stop = 0 {
 }`,
     ["x", "stop"],
   ),
+  // caeser automated verification of ppl, related "motivation", this has been studied very heaviliy
+
+  sMotivation,
+  sCaesarOverview,
+  sCaesarProofRules,
+
   sConnection(0, 6),
-  sC,
+  // introduce mc without costs, show cylinder basis with ionesco*, add costs define expected costs, add nondet to give mdps therefor minimize ec
+  // bellman, eq oec
+  sC(sequenceA),
+  // mdps in lean
+  sMarkovChains,
+  sC(sequenceB),
   sMdp,
+  // show op = lfp \eta generically
+  sOMdp,
   sConnection(2, 5),
+  // intro pgcl, with two semantics an operational and a denotation, show op instanciates such an mdp, and wp is eq lfp \eta, showing soundness
+  // intuition of wp
+  // add prob of non-term you get wlp (the lfp becomes a gfp)
+  // explain non-term into cwp
   s01,
   s02,
+  // park -> idle -> idle k-induct
   s00(
     `x := 1 ; stop := 0 ;
     while stop = 0 {
@@ -206,14 +444,16 @@ while stop = 0 {
       }`,
     ["x", "stop"],
   ),
-  sOMdp,
   s09,
   sZoo,
   sZooSoundness,
   sIdle,
   sConnection(4, 6),
+  // caeser deep embedding (substitution), showing Theorem 41. and 42.
   sHeyVL,
   sConnection(5, 6, <>have covered</>),
+  // related work
+  // conclusion
 
   // sA,
   // sRels,

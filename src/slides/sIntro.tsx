@@ -7,6 +7,7 @@ import { H } from "../common";
 
 import DTU from "../assets/DTU2.png";
 import OLDENBURG from "../assets/oldenburg.svg";
+import DFF from "../assets/dff-logo.png";
 import React from "react";
 import { Network, rewardNode } from "../Network";
 import { s, s1, s2 } from "../nodes";
@@ -26,6 +27,14 @@ const lexicon = [
 ];
 
 const eqFin = tex`=^{\tiny f}`;
+
+export const Sponsors = () => (
+  <appear.div className="flex gap-10">
+    <appear.img to={1} src={DTU} className="w-12 mt-10" />
+    <appear.img to={1} src={OLDENBURG} className="w-32 mt-10" />
+    <appear.img to={1} src={DFF} className="w-32 mt-10" />
+  </appear.div>
+);
 
 export const sIntro = makeSlide(1, () => {
   const { step } = useSlide();
@@ -68,10 +77,7 @@ export const sIntro = makeSlide(1, () => {
       <appear.div to={1} exit className="text-3xl mt-10 text-center">
         Funded by DFF project AuRoRA
       </appear.div>
-      <appear.div className="flex gap-10">
-        <appear.img to={1} src={DTU} className="w-12 mt-10" />
-        <appear.img to={1} src={OLDENBURG} className="w-32 mt-10" />
-      </appear.div>
+      <Sponsors />
     </div>
   );
 });

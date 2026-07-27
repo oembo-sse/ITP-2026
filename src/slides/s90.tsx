@@ -5,6 +5,7 @@ import { appear, useSlide } from "../slides";
 import DTU from "../assets/DTU2.png";
 import OLDENBURG from "../assets/oldenburg.svg";
 import { H } from "../common";
+import { Sponsors } from "./sIntro";
 
 export const s90 = makeSlide(1, () => {
   const { step } = useSlide();
@@ -42,10 +43,7 @@ export const s90 = makeSlide(1, () => {
         <appear.div to={1} exit className="text-3xl mt-10 text-center">
           Funded by DFF project AuRoRA
         </appear.div>
-        <appear.div className="flex gap-10">
-          <appear.img to={1} src={DTU} className="w-12 mt-10" />
-          <appear.img to={1} src={OLDENBURG} className="w-32 mt-10" />
-        </appear.div>
+        <Sponsors />
       </AnimatePresence>
     </div>
   );

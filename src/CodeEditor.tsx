@@ -171,7 +171,7 @@ export const LeanCode = ({ src }: { src: string }) => {
                     Number: "text-fg-500",
                     Ident: "",
                     Keyword: "text-fg-700",
-                    Punctuation: "text-bg-700/50 text-sm",
+                    Punctuation: "text-bg-700/50",
                     Op: "text-fg-400",
                   }[tok.token_type] ?? "")
                 }
@@ -184,5 +184,44 @@ export const LeanCode = ({ src }: { src: string }) => {
         </LayoutGroup>
       </pre>
     </div>
+  );
+};
+
+export const InlineLeanCode = ({ src }: { src: string }) => {
+  const { tokens } = useMemo(() => pgcl.highlight_lean(src), [src]);
+
+  const markers: string[] = [];
+
+  return (
+    <span className="font-mono whitespace-pre">
+      {tokens.map((tok, id) => {
+        if (tok.token_type === "Marker") {
+          markers.push(tok.text);
+          return null;
+        }
+        if (tok.token_type === "MarkerEnd") {
+          markers.pop();
+          return null;
+        }
+        return (
+          <span
+            key={id}
+            className={
+              "whitespace-pre inline " +
+              ({
+                WhiteSpace: "",
+                Number: "text-fg-500",
+                Ident: "",
+                Keyword: "text-fg-700",
+                Punctuation: "text-bg-700/50",
+                Op: "text-fg-400",
+              }[tok.token_type] ?? "")
+            }
+          >
+            {tok.text}
+          </span>
+        );
+      })}
+    </span>
   );
 };

@@ -11,6 +11,7 @@ export type AppearProps = {
   className?: string;
   src?: string;
   id?: string;
+  layoutId?: string;
   children?: React.ReactNode | React.ReactNode[];
 };
 
@@ -25,6 +26,7 @@ const deriveProps = (props: AppearProps) => {
     className,
     src,
     id: props.id,
+    layoutId: props.layoutId,
   } as const;
 };
 

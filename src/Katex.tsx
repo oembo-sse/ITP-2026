@@ -25,6 +25,7 @@ export const Katex: React.FC<{ src: string }> = ({ src }) => {
             "\\McL": "\\htmlClass{text-McL-500}{\\mathcal{L}}",
             "\\MfL": "\\htmlClass{text-McL-500}{\\mathfrak{L}}",
             "\\mem": "\\,\\in\\,",
+            "\\Exp": "\\H{\\mathbf{Exp}}^{=#1}",
             "\\EC": "\\H{\\mathbf{ECost}}^{=#1}_{#2}",
             "\\PathsEq": "\\mathbf{Paths}^{=#1}",
             "\\Cost": "\\text{Cost}",

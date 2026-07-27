@@ -37,19 +37,27 @@ const steps = [
     <br />
     of a program and a memory, denoted by {tex`\\state{C}{\\sigma}`}.
   </div>,
-  ...operationalSemantics.map(
-    (op) => (delta: number) =>
-      delta == 0 && (
-        <div
-          className={
-            "flex flex-col items-center transition gap-20 " +
-            (delta == 0 ? "text-4xl" : "text-xl")
-          }
-        >
-          {op}
-        </div>
-      ),
-  ),
+  // ...operationalSemantics.map(
+  //   (op) => (delta: number) =>
+  //     delta == 0 && (
+  //       <div
+  //         className={
+  //           "flex flex-col items-center transition gap-20 " +
+  //           (delta == 0 ? "text-4xl" : "text-xl")
+  //         }
+  //       >
+  //         {op}
+  //       </div>
+  //     ),
+  // ),
+  (delta: number) =>
+    delta == 0 && (
+      <div className="flex flex-col gap-6 text-xl">
+        {operationalSemantics.map((op) => (
+          <div className="flex justify-center items-center gap-10">{op}</div>
+        ))}
+      </div>
+    ),
   <LeanCode src={smallStepCode} />,
 ];
 

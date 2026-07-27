@@ -5,7 +5,10 @@ import { appear, useSlide } from "../slides";
 import { Callout, H } from "../common";
 import React from "react";
 import { identities, weakestPre } from "../semantics";
-import { LeanCode } from "../CodeEditor";
+import { InlineLeanCode, LeanCode } from "../CodeEditor";
+import { s } from "../nodes";
+import { Network, rewardNode } from "../Network";
+import type { Edge } from "vis-network/esnext";
 
 const wpDef = `def wp (O : Optimization) : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
   | pgcl {skip} => ⟨fun X ↦ X, fun ⦃_ _⦄ h ↦ h⟩
@@ -134,6 +137,123 @@ export const s09 = makeSlide(steps.length + 1, () => {
           return s;
         })}
       </div>
+
+      <appear.div className="flex relative w-[100ch]">
+        <Network
+          highlighted={[]}
+          nodes={[
+            {
+              x: 0,
+              y: 0,
+              id: s(1),
+              label: "σ",
+              size: 4,
+              color: "white",
+              font: { size: 20 },
+            },
+            {
+              x: 0,
+              y: 70,
+              id: s(2),
+              // label: s(2),
+              shape: "dot",
+              size: 2,
+            },
+            {
+              x: -150,
+              y: 140,
+              id: s(3),
+              shape: "dot",
+              size: 2,
+              label: "f(τ₁)",
+              font: { size: 20 },
+              widthConstraint: { minimum: 20 },
+              // label: s(3),
+            },
+            {
+              x: -50,
+              y: 140,
+              id: s(4),
+              shape: "dot",
+              size: 2,
+              label: "f(τ₂)",
+              font: { size: 20 },
+              widthConstraint: { minimum: 20 },
+              // label: s(4),
+            },
+            {
+              x: 80,
+              y: 140,
+              id: s(5),
+              shape: "dot",
+              size: 2,
+              label: "f(τ₃)",
+              font: { size: 20 },
+              widthConstraint: { minimum: 20 },
+              // label: s(5),
+            },
+            {
+              x: 150,
+              y: 140,
+              id: s(6),
+              shape: "dot",
+              size: 2,
+              label: "...",
+              color: "white",
+            },
+            {
+              x: -210,
+              y: 162,
+              label: "Exp[",
+              shape: "box",
+              font: { face: "'KaTeX_Main'", size: 30 },
+              color: "white",
+              widthConstraint: { minimum: 20 },
+            },
+            {
+              x: 180,
+              y: 162,
+              label: "]",
+              shape: "box",
+              font: { face: "'KaTeX_Main'", size: 30 },
+              color: "white",
+              widthConstraint: { minimum: 20 },
+            },
+          ]}
+          edges={(
+            [
+              [1, 3, {}],
+              [1, 2, {}],
+              [2, 4, {}],
+              [2, 5, { label: "C", font: { size: 30 } }],
+              [1, 6, { arrows: "" }],
+            ] as [number, number, Edge][]
+          ).map(([from, to, opts]) => ({
+            from: s(from),
+            to: s(to),
+            arrows: "to",
+            dashes: true,
+            width: 2,
+            ...opts,
+          }))}
+        />
+      </appear.div>
+
+      <appear.div>
+        <appear.div className="grid grid-cols-[auto_80ch] text-2xl gap-x-4 gap-y-3">
+          <InlineLeanCode src="Exp[⋯] " />
+          {[
+            "= fun σ ↦ ⨆ n : ℕ, ⨅ 𝒮 : Scheduler, EC (cost f) 𝒮 n conf[C, σ]",
+            "-- by Definition \n= op[𝒟]⟦C⟧ f",
+            "-- by Lemma 27\n= (lfp ξ[𝒟])⟦C⟧ f",
+            "-- by Theorem 30\n= wp[𝒟]⟦C⟧ f",
+          ].map((s, i) => (
+            <appear.div key={i} className="col-start-2">
+              <InlineLeanCode src={s} />
+            </appear.div>
+          ))}
+        </appear.div>
+      </appear.div>
     </div>
   );
 });
