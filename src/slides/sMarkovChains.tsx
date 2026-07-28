@@ -107,7 +107,7 @@ def Path.Cyl (π : M.Path) : Set M.InfPath := {π' | π ∈ π'.pref}
           />
         </appear.div>
         <appear.div show={t("path pmf")} className="text-4xl">
-          Measure theoredic connection
+          Measure theoretic connection
         </appear.div>
         <appear.div show={t("path pmf")}>
           <LeanCode
@@ -127,9 +127,9 @@ def Path.measure (π : M.Path) : Measure π.succs := π.pmf.toMeasure
         </appear.div>
         <appear.div
           show={t("mathlib")}
-          className="flex relative rounded justify-center flex-col items-center -mx-2 px-2 border pt-5 pb-2 mt-4 mb-2"
+          className="flex relative rounded-xl shadow-xl justify-center flex-col items-center -mx-3 px-3 border pt-5 pb-2 mt-4 mb-2 bg-bg-50"
         >
-          <div className="absolute -top-3 border left-2 text-lg font-mono bg-white rounded px-3">
+          <div className="absolute -top-3 border left-1 text-lg font-mono bg-bg-50 rounded px-3">
             Mathlib/Probability/ProductMeasure.lean
           </div>
           <LeanCode
@@ -140,7 +140,7 @@ def infinitePi (μ : (i : ι) → Measure (X i)) : Measure (Π i, X i) := ⋯
           />
           <LeanCode
             src={`
-/-- Measure theoredic cylinders from mathlib. -/
+/-- Measure theoretic cylinders from mathlib. -/
 def cylinder (s : Finset ι) (S : Set ((i : ↥s) → α i)) : Set ((i : ι) → α i) := ⋯
 `}
           />

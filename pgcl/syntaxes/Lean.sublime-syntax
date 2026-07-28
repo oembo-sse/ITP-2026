@@ -125,7 +125,7 @@ contexts:
       scope: keyword.other.lean
     - match: \b(skip|assign|seqL|seqR|seqF|seq|probL|probR|prob|nonDetL|nonDetR|nonDet|loop|tick|observe|assert|havoc|havocs|validate|coassert|coassume|cohavoc|cohavocs|covalidate|reward|;)\b
       scope: keyword.other.lean
-    - match: \b(while|inv|vc|nlog2)\b
+    - match: \b(while|idle-inv|inv|vc|nlog2)\b
       scope: keyword.other.lean
     - match: \b(heyvl|heylo|pgcl|spgcl)\b
       scope: keyword.other.lean
@@ -178,6 +178,8 @@ contexts:
       scope: keyword.operator.append.lean
     - match: '(::|<\||\|>)'
       scope: keyword.operator.other.lean
+    - match: "⋯"
+      scope: punctuation.definition.comment
     - match: '(?<=\s)(_)(?=\s)'
       scope: variable.language.lean
 

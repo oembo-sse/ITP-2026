@@ -11,7 +11,7 @@ import { sA } from "./slides/sA";
 import { sC, sequenceA, sequenceB } from "./slides/sC";
 import { sRels } from "./slides/sRels";
 import { sLean } from "./slides/sLean";
-import { H } from "./common";
+import { Callout, H } from "./common";
 import { tex } from "./Katex";
 import { s02 } from "./slides/s02";
 import { s09, sExp, sExp2, sZoo, sZooSoundness } from "./slides/s09";
@@ -19,6 +19,7 @@ import { sMdp } from "./slides/sMdp";
 import { sOMdp } from "./slides/sOMdp";
 import React from "react";
 import { sMarkovChains } from "./slides/sMarkovChains";
+import { Code, InlineLeanCode, LeanCode } from "./CodeEditor";
 
 const Domain = ({
   id,
@@ -156,11 +157,184 @@ const sConnection = (
     );
   });
 
-const sIdle = makeSlide(1, () => {
+type IdlePart =
+  | "park"
+  | "idle desc"
+  | "idle example A"
+  | "idle example B"
+  | "idle def"
+  | "idle comment"
+  | "k ind"
+  | "co";
+const idleSteps: IdlePart[][] = [
+  //
+  ["park"],
+  ["park", "idle example A"],
+  ["park", "idle example A", "idle desc"],
+  ["park", "idle desc", "idle example B"],
+  ["park", "idle desc", "idle example B", "idle def"],
+  ["park", "idle desc", "idle def"],
+  ["park", "idle desc", "idle def", "idle comment"],
+  ["park", "idle desc", "idle def"],
+  ["park", "idle desc", "idle def", "k ind"],
+  ["park", "idle desc", "idle def", "k ind", "co"],
+];
+
+const sIdle = makeSlide(idleSteps.length, (step) => {
+  const t = (p: IdlePart): boolean => (idleSteps[step] ?? []).includes(p);
+
+  const co = t("co") ? 1 : 0;
+  const CO = <appear.span show={t("co")}>co</appear.span>;
+
   return (
     <div className="flex justify-center flex-col items-center">
       <appear.div className="text-6xl mb-10">
-        <H>Idle</H> k-(co)induction
+        Invariant based reasoning for loops
+        {/* <H>Idle</H> k-(co)induction */}
+      </appear.div>
+
+      <appear.div className="flex flex-col gap-4 w-[115ch]">
+        <appear.div show={t("park")} className="text-4xl">
+          <H>Park</H> {CO}induciton
+        </appear.div>
+        <appear.div>
+          <LeanCode
+            src={
+              [
+                `
+theorem ParkInduction {I : 𝔼[Γ, ENNReal]}
+  -- \`I\` is a Park-invariant
+  (h : Ψ[wp[O]⟦C⟧] b φ I ≤ I) :
+    wp[O]⟦while b { C }⟧ φ ≤ I := ⋯
+            `,
+                `
+theorem ParkCoinduction {I : ProbExp[Γ]}
+  -- \`I\` is a Park-coinvariant
+  (h : I ≤ Ψ[wlp[O]⟦C⟧] b φ I) :
+    I ≤ wlp[O]⟦while b { C }⟧ φ := ⋯
+            `,
+              ][co]
+            }
+          />
+        </appear.div>
+
+        <appear.div show={t("idle desc")} className="text-4xl">
+          <H>Idle</H> {CO}
+          <appear.span>induction</appear.span>
+        </appear.div>
+        <appear.p show={t("idle desc")} className="text-2xl">
+          <H>Idle</H> {CO}induction is <H>Park</H> {CO}induction where states
+          that vary only over the modified <br /> variables with respect to an
+          initial state {tex`\sigma_0`} need to be considered for the inductive
+          invariant.
+        </appear.p>
+        <appear.div
+          show={t("idle example A") || t("idle example B")}
+          className="flex place-content-center gap-6 mb-4"
+        >
+          <appear.div className="rounded-xl shadow-xl bg-bg-50 p-4 w-[40ch]">
+            <p className="text-2xl mb-2">
+              Using <H>Park</H>-induction
+            </p>
+            <LeanCode
+              src={`
+assert P(x) ;
+while ⋯
+  -- \`I\` has to assert P(x)
+  inv(I ∧ P(x))
+{ ⋯ no assignments to x ⋯ } ;
+assert P(x)
+`}
+            />
+          </appear.div>
+          <appear.div
+            className="rounded-xl shadow-xl bg-bg-50 p-4 w-[60ch]"
+            show={t("idle example B")}
+          >
+            <p className="text-2xl mb-2">
+              Using <H>Idle</H>-induction
+            </p>
+            <LeanCode
+              src={`
+assert P(x) ;
+while ⋯
+  -- \`I\` can assume P(x) using Idle-induction
+  idle-inv(I)
+{ ⋯ no assignments to x ⋯ } ;
+assert P(x)
+`}
+            />
+          </appear.div>
+        </appear.div>
+        <appear.div show={t("idle def")}>
+          <LeanCode
+            src={
+              [
+                `
+theorem IdleInduction {σ₀ : State Γ} {I : 𝔼[Γ, ENNReal]}
+  -- \`I\` is an Idle-invariant
+  (h : ∀ σ ∈ σ₀.EQ C.modsᶜ, Ψ[wp[O]⟦@C⟧] b φ I σ ≤ I σ) :
+    wp[O]⟦while @b { @C }⟧ φ σ₀ ≤ I σ₀ := ⋯
+`,
+                `
+theorem IdleCoinduction {σ₀ : State Γ} {I : ProbExp[Γ]}
+  -- \`I\` is an Idle-coinvariant
+  (h : ∀ σ ∈ σ₀.EQ C.modsᶜ, I σ ≤ Ψ[wlp[O]⟦@C⟧] b φ I σ) :
+    I σ₀ ≤ wlp[O]⟦while @b { @C }⟧ φ σ₀ := ⋯
+`,
+              ][co]
+            }
+          />
+        </appear.div>
+        <appear.div show={t("idle comment")} className="flex justify-center">
+          <div className="w-[80ch]">
+            <Callout title="This required new proof methods!">
+              <p className="text-xl mb-4">
+                Similar proof rules as <H>Idle</H>-induction exists for
+                classical PV but proofs use strongest postcondition transformers
+                where{" "}
+                <em>postexpectation transformers does not exist for PPs</em>{" "}
+                <Cite>[Jones 1990]</Cite>.
+              </p>
+              <p className="text-xl">
+                To the best of our knowledge this is the first proof of such a
+                claim using <H>backwards reasoning</H> weakest preexpectation.
+              </p>
+            </Callout>
+          </div>
+        </appear.div>
+
+        <appear.div
+          show={t("k ind")}
+          className="text-4xl flex justify-between items-center"
+        >
+          <span>
+            Idle <H>k</H>-{CO}induciton
+          </span>{" "}
+          <span className="text-2xl">
+            <Cite>Idle version of [Batz et al., CAV 2021]</Cite>
+          </span>
+        </appear.div>
+        <appear.div show={t("k ind")}>
+          <LeanCode
+            src={
+              [
+                `
+theorem IdleKInduction {σ₀ : State Γ} {I : 𝔼[Γ, ENNReal]} (k : ℕ)
+  -- \`I\` is an Idle k-invariant
+  (h : ∀ σ ∈ σ₀.EQ C.modsᶜ, Ψ[wp[O]⟦C⟧] b φ ((Ψ[wp[O]⟦C⟧] b φ · ⊓ I)^[k] I) σ ≤ I σ) :
+    wp[O]⟦while b { C }⟧ φ σ₀ ≤ I σ₀ := ⋯
+    `,
+                `
+theorem IdleKCoinduction {σ₀ : State Γ} {I : ProbExp[Γ]} (k : ℕ)
+  -- \`I\` is an Idle k-coinvariant
+  (h : ∀ σ ∈ σ₀.EQ C.modsᶜ, I σ ≤ Ψ[wlp[O]⟦C⟧] b φ ((Ψ[wlp[O]⟦C⟧] b φ · ⊓ I)^[k] I) σ) :
+    I σ₀ ≤ wlp[O]⟦while b { C }⟧ φ σ₀ := ⋯
+    `,
+              ][co]
+            }
+          />
+        </appear.div>
       </appear.div>
     </div>
   );
@@ -504,11 +678,12 @@ while stop = 0 {
   // caeser automated verification of ppl, related "motivation", this has been studied very heaviliy
 
   sMotivation,
-  sRelatedWork,
   sCaesarOverview,
   sCaesarProofRules,
 
   sConnection(0, 5),
+
+  sRelatedWork,
   // introduce mc without costs, show cylinder basis with ionesco*, add costs define expected costs, add nondet to give mdps therefor minimize ec
   // bellman, eq oec
   sC(sequenceA),

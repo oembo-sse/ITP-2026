@@ -447,8 +447,8 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
       <appear.div className="col-span-full flex justify-center my-6">
         <Callout title="Problem!">
           <p className="text-2xl">
-            Since {tex`\wlp{C}`} uses {tex`\gfp`} we <em>cannot</em> directly
-            relate to {tex`\lfp ξ`}
+            How do we relate {tex`\wlp{C}`} (which uses uses {tex`\gfp`}) to{" "}
+            {tex`\lfp ξ`}?
           </p>
         </Callout>
       </appear.div>

@@ -44,6 +44,8 @@ const show = (props: AppearProps) => {
 export const appear = {
   div: (props: AppearProps) =>
     show(props) && <motion.div {...deriveProps(props)} />,
+  p: (props: AppearProps) =>
+    show(props) && <motion.p {...deriveProps(props)} />,
   img: (props: AppearProps) =>
     show(props) && <motion.img {...deriveProps(props)} />,
   li: (props: AppearProps) =>

@@ -62,7 +62,7 @@ export const Code = ({ src }: { src: string }) => {
   const markers: string[] = [];
 
   return (
-    <div className="font-mono p-4">
+    <div className="font-mono">
       <pre className="pointer-events-none flex flex-wrap justify-start w-[45ch]">
         <LayoutGroup>
           {/* <AnimatePresence> */}
