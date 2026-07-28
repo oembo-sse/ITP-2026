@@ -14,7 +14,7 @@ import { sLean } from "./slides/sLean";
 import { H } from "./common";
 import { tex } from "./Katex";
 import { s02 } from "./slides/s02";
-import { s09, sZoo, sZooSoundness } from "./slides/s09";
+import { s09, sExp, sExp2, sZoo, sZooSoundness } from "./slides/s09";
 import { sMdp } from "./slides/sMdp";
 import { sOMdp } from "./slides/sOMdp";
 import React from "react";
@@ -70,8 +70,8 @@ const sConnection = (
   makeSlide(end - start, () => {
     const n = {
       pGCL_op: 3 - start,
-      pGCL_wp: 4 - start,
-      HeyVL: 5 - start,
+      pGCL_wp: 3 - start,
+      HeyVL: 4 - start,
       MDP: 2 - start,
       MC: 1 - start,
     };
@@ -187,64 +187,127 @@ const Cite = ({
 const sMotivation = makeSlide(1, () => {
   return (
     <appear.div className="w-[120ch] gap-4 flex flex-col">
-      <h1 className="text-4xl flex justify-between">
-        <H>Verification techniques for reasoning about PPs</H>{" "}
-        <H>(incomplete)</H>
+      <h1 className="text-5xl flex justify-between items-center">
+        <H>Verification techniques for PPs</H>{" "}
+        <H className="text-3xl">(highly incomplete)</H>
       </h1>
       <div>
-        <h2 className="text-3xl mb-1">Expectation transformers</h2>
-        <p className="text-2xl flex flex-wrap gap-x-2">
+        <h2 className="text-3xl mb-1">• Expectation-based proof calculi</h2>
+        <p className="text-2xl flex flex-wrap gap-x-2 ml-10 relative">
+          {/* <div className="absolute top-0 -left-4">•</div> */}
           <Cite>[Kozen 1983]</Cite>
           <Cite>[McIver & Morgan 2005]</Cite>
           <Cite>[Kaminski et al., 2018]</Cite>
           <Cite>[Batz et al., 2020-2025]</Cite>
-          <Cite>[Enea et al. 2026] ...</Cite>
+          <Cite>[Enea et al. 2026]</Cite>
         </p>
       </div>
       <div>
-        <h2 className="text-3xl mb-1">Supermartingales</h2>
-        <p className="text-2xl flex flex-wrap gap-x-2">
-          <Cite>[Chakarov et al. 2013]</Cite>
-          <Cite>[Chatterjee et al. 2017-2025]</Cite>
+        <h2 className="text-3xl mb-1">• Martingale-based proof rules</h2>
+        <p className="text-2xl flex flex-wrap gap-x-2 ml-10 relative">
+          <Cite>[Chakarov, Sankaranarayanan 2013]</Cite>
           <Cite>[McIver et al. 2017]</Cite>
+          <Cite>[Chatterjee et al. 2025]</Cite>
           <Cite>[Takisaka et al. 2021]</Cite>
-          <Cite>[Abate et al. 2024, 2025] ...</Cite>
+          <Cite>[Abate, Giacobbe, Roy 2025]</Cite>
         </p>
       </div>
       <div>
-        <h2 className="text-3xl mb-1">Probabilistic Hoare logics</h2>
-        <p className="text-2xl flex flex-wrap gap-x-2">
-          <Cite>[den Hartog 2002]</Cite>
-          <Cite>[Barthe et al. 2016-2025]</Cite>
+        <h2 className="text-3xl mb-1">• Probabilistic Program Logics</h2>
+        <p className="text-2xl flex flex-wrap gap-x-2 ml-10 relative">
+          <Cite>[den Hartog & de Vink 2002]</Cite>
+          <Cite>[Barthe et al. 2016, 2018]</Cite>
+          <Cite>[Aguirre et al. 2024]</Cite>
+          <Cite>[Haselwarter et al. 2024]</Cite>
+          <Cite>[Avanzini et al. 2025]</Cite>
           <Cite>[Bao et al. 2025]</Cite>
-          <Cite>[Aguirre et al. 2023-2026]</Cite> ...
+          <Cite>[Li et al. 2025]</Cite>
         </p>
       </div>
     </appear.div>
   );
 });
 
-const sCaesarOverview = makeSlide(5, () => {
+const sRelatedWork = makeSlide(1, () => {
+  return (
+    <appear.div className="w-[120ch] gap-4 flex flex-col">
+      <h1 className="text-5xl flex justify-between">
+        <H>Related Work</H>
+      </h1>
+      <div>
+        <h2 className="text-3xl mb-1">Related formalizations</h2>
+        <p className="text-2xl flex flex-col gap-x-2 ml-6">
+          <p>
+            • MDPs: <Cite>[Hölzl 2017]</Cite>
+          </p>
+          <p>
+            • Fixed point characterizations for MDPs:{" "}
+            <Cite>[Schäffeler & Abdulaziz 2023]</Cite>
+          </p>
+          <p>
+            • wp-calculi for pGCL: <Cite>[Hurd, McIver, Morgan 2005]</Cite>{" "}
+            <Cite>[Cock 2012]</Cite> <Cite>[Rand & Zdancewic 2015]</Cite>
+          </p>
+          <p>
+            • Soundness of ert-calculus wrt. MDP semantics:{" "}
+            <Cite>[Hölzl 2016]</Cite>
+          </p>
+        </p>
+      </div>
+      <div>
+        <h2 className="text-3xl mb-1">This work</h2>
+        <p className="text-2xl flex flex-wrap gap-x-2 ml-6 relative">
+          <p>
+            • A deep embedding of Caesar’s intermediate verification language
+            HeyVL
+          </p>
+          <p>
+            • Soundness proofs for existing HeyVL encodings by{" "}
+            <Cite>[Schröer et al. 2023]</Cite>
+          </p>
+          <p>
+            • Improved HeyVL encoding of a proof rule for loops by{" "}
+            <Cite>[Batz et al. 2021]</Cite>
+          </p>
+          <p>
+            • Foundational weakest preexpectation calculi for pGCL with
+            conditioning
+          </p>
+        </p>
+      </div>
+    </appear.div>
+  );
+});
+
+const sCaesarOverview = makeSlide(6, (step) => {
   const n = {
     rules: 1,
     heyvl: 0,
     smt: 2,
     storm: 3,
     lean: 4,
+    encodingLean: 5,
   };
 
   return (
     <div>
+      <div className="fixed left-10 bottom-4 text-3xl">
+        <sup>1</sup>
+        <Cite>[Schröer et al. 2022]</Cite>
+        <br />
+        <sup>2</sup>
+        <Cite>[Schröer et al. 2026]</Cite> (previous session at CAV)
+      </div>
       <appear.div className="mb-10">
         <H className="text-5xl">
-          Caesar(12): A Verification Infrastructure for PPs
+          Caesar<sup>1 2</sup>: A Verification Infrastructure for PPs
         </H>
       </appear.div>
 
-      <div className="text-3xl grid grid-cols-3 gap-x-4 gap-y-1 text-center [&>*]:p-4 w-[80ch]">
+      <div className="text-3xl grid grid-cols-3 gap-x-4 gap-y-2 text-center [&>*]:p-4 w-[80ch]">
         <appear.div
           from={n.rules}
-          className="grid grid-rows-3 grid-flow-col gap-2 border col-span-full"
+          className="grid grid-rows-3 grid-flow-col gap-2 border col-span-full rounded-xl shadow-xl bg-bg-50"
         >
           <div>supermartingales</div> <div>k-induction</div> <div>...</div>
           <div>(P)AST rules</div> <div>sensitivity analysis</div> <div>...</div>
@@ -254,10 +317,21 @@ const sCaesarOverview = makeSlide(5, () => {
 
         <appear.div from={n.rules} className="col-start-2">
           {tex`\Downarrow`}
-          <span className="absolute ml-4">Encoding</span>
+          <span className="absolute ml-4 text-nowrap">
+            Encoding{" "}
+            <appear.span
+              from={n.encodingLean}
+              className="bg-fg-600 text-white p-2 rounded-xl"
+            >
+              (formalized in Lean)
+            </appear.span>
+          </span>
         </appear.div>
 
-        <appear.div from={n.heyvl} className="grid border col-span-full">
+        <appear.div
+          from={n.heyvl}
+          className="grid border col-span-full rounded-xl shadow-xl bg-bg-50"
+        >
           Quantitative Intermediate Verification Language <br /> (HeyVL)
         </appear.div>
 
@@ -265,14 +339,28 @@ const sCaesarOverview = makeSlide(5, () => {
         <appear.div from={n.storm}>{tex`\Downarrow`}</appear.div>
         <appear.div from={n.lean}>{tex`\Downarrow`}</appear.div>
 
-        <appear.div from={n.smt} className="border row-start-5">
+        <appear.div
+          from={n.smt}
+          className="border row-start-5 rounded-xl shadow-xl bg-bg-50"
+        >
           Verif. Cond. Generator <br /> (SMT)
         </appear.div>
-        <appear.div from={n.storm} className="border row-start-5">
+        <appear.div
+          from={n.storm}
+          className="border row-start-5 rounded-xl shadow-xl bg-bg-50"
+        >
           Prob. Model Checking <br /> (Storm)
         </appear.div>
-        <appear.div from={n.lean} className="border row-start-5">
-          Interactive Proofs <br /> (Lean) HIGHLIGHT!!!
+        <appear.div
+          from={n.lean}
+          className="border row-start-5 rounded-xl shadow-xl bg-bg-50 relative flex justify-center overflow-hidden"
+        >
+          <div
+            className={`z-0 absolute inset-0 transition ${n.encodingLean <= step ? "bg-fg-600" : ""}`}
+          ></div>
+          <div className={`z-10 ${n.encodingLean <= step ? "text-white" : ""}`}>
+            Interactive Proofs <br /> (Lean)
+          </div>
         </appear.div>
       </div>
     </div>
@@ -416,20 +504,21 @@ while stop = 0 {
   // caeser automated verification of ppl, related "motivation", this has been studied very heaviliy
 
   sMotivation,
+  sRelatedWork,
   sCaesarOverview,
   sCaesarProofRules,
 
-  sConnection(0, 6),
+  sConnection(0, 5),
   // introduce mc without costs, show cylinder basis with ionesco*, add costs define expected costs, add nondet to give mdps therefor minimize ec
   // bellman, eq oec
   sC(sequenceA),
   // mdps in lean
   sMarkovChains,
   sC(sequenceB),
-  sMdp,
+  // sMdp,
   // show op = lfp \eta generically
   sOMdp,
-  sConnection(2, 5),
+  sConnection(2, 4),
   // intro pgcl, with two semantics an operational and a denotation, show op instanciates such an mdp, and wp is eq lfp \eta, showing soundness
   // intuition of wp
   // add prob of non-term you get wlp (the lfp becomes a gfp)
@@ -444,14 +533,15 @@ while stop = 0 {
       }`,
     ["x", "stop"],
   ),
+  sExp,
   s09,
+  sExp2,
   sZoo,
-  sZooSoundness,
   sIdle,
-  sConnection(4, 6),
+  sConnection(3, 5),
   // caeser deep embedding (substitution), showing Theorem 41. and 42.
   sHeyVL,
-  sConnection(5, 6, <>have covered</>),
+  sConnection(4, 5, <>have covered</>),
   // related work
   // conclusion
 

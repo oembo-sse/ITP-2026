@@ -59,6 +59,16 @@ const steps = [
       </div>
     ),
   <LeanCode src={smallStepCode} />,
+  <LeanCode
+    src={`
+inductive Termination where
+  /-- Faulted termination due to observation failure, denoted by ↯. -/
+  | fault
+  /-- Partial termination, denoted by ⇓. -/
+  | term
+instance : SmallStepSemantics (pGCL Γ) (State Γ) Termination Act := 𝕊 cost_t cost_p
+    `}
+  />,
 ];
 
 export const s02 = makeSlide(steps.length + 1, () => {

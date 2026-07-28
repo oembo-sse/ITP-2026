@@ -83,7 +83,7 @@ export const identities = {
   op_def: `def op[O] : P → 𝔼[S] →o 𝔼[S] :=
   fun C ↦ ⟨fun X σ ↦ ⨆ n, ⨅ 𝒮, EC (𝕊.cost X) 𝒮 n conf[C, σ], ⋯⟩`,
   wp_eq_op: `wp[O]⟦C⟧ X = op[O]⟦C⟧ X`,
-  wlp_eq_wfp: `wlp'[O]⟦C⟧ X = 1 - wfp'[Oᶜ]⟦C⟧ (1 - X)`,
+  wlp_eq_wfp: `wlp[O]⟦C⟧ f = 1 - wfp[Oᶜ]⟦C⟧ (1 - f)`,
   wfp_eq_op: `wfp[O]⟦C⟧ X = op[O]⟦C⟧ X`,
   gfp_eq_lfp: `gfp f = 1 - lfp ⟨fun x ↦ 1 - f (1 - x), ⋯⟩`,
   opt_def: `inductive Optimization where

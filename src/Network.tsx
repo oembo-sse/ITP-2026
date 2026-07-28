@@ -85,9 +85,13 @@ export const Network = React.memo(
         setNetworkRef(network);
 
         network.on("stabilized", () => {
+          // We do this a couple of times. Seem to be most stable
           network.fit({ animation: false, maxZoomLevel: 5 });
           setTimeout(() => {
             network.fit({ animation: false, maxZoomLevel: 5 });
+            setTimeout(() => {
+              network.fit({ animation: false, maxZoomLevel: 5 });
+            }, 10);
           }, 10);
         });
 
