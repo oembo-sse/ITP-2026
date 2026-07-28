@@ -35,7 +35,8 @@ export const Katex: React.FC<{ src: string }> = ({ src }) => {
             "\\Bell": "\\H{\\Phi}",
             // old
             "\\code": "\\texttt{\\H{#1}}",
-            "\\pGCL": "\\mathbf{pGCL}",
+            "\\pGCL": "\\H{\\mathbf{pGCL}}",
+            "\\spGCL": "\\H{\\mathbf{spGCL}}",
             "\\Expr": "\\mathbf{Expr}",
             "\\State": "\\mathbf{State}",
             "\\Mem": "\\mathbf{Mem}",
@@ -82,6 +83,8 @@ export const Katex: React.FC<{ src: string }> = ({ src }) => {
             "\\wfp": "\\mathbf{\\H{wfp}}\\llbracket#1\\rrbracket",
             // "\\dwp": "\\mathbf{\\H{dwp}}\\llbracket#1\\rrbracket(#2)",
             "\\dwp": "\\mathbf{\\H{wp}}\\llbracket#1\\rrbracket(#2)",
+            "\\HeyLo": "\\H{\\textbf{HeyLo}}",
+            "\\HeyVL": "\\H{\\textbf{HeyVL}}",
             "\\orew": "\\mathbf{r}",
             "\\ER": "\\H{\\mathbf{ExpRew}}",
             "\\MinER": "\\H{\\mathbf{MinExpRew}}",

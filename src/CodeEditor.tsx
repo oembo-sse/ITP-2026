@@ -121,8 +121,17 @@ export const Code = ({ src }: { src: string }) => {
   );
 };
 
-export const LeanCode = ({ src }: { src: string }) => {
-  const { tokens } = useMemo(() => pgcl.highlight_lean(src), [src]);
+export const LeanCode = ({
+  src,
+  noTrim = true,
+}: {
+  src: string;
+  noTrim?: boolean;
+}) => {
+  const { tokens } = useMemo(
+    () => pgcl.highlight_lean(noTrim ? src : src.trim()),
+    [src, noTrim],
+  );
 
   const tokIndex: Record<string, number> = {};
   const markers: string[] = [];

@@ -20,6 +20,7 @@ import { sOMdp } from "./slides/sOMdp";
 import React from "react";
 import { sMarkovChains } from "./slides/sMarkovChains";
 import { Code, InlineLeanCode, LeanCode } from "./CodeEditor";
+import { sHeyVL } from "./slides/sHeyVL";
 
 const Domain = ({
   id,
@@ -195,8 +196,11 @@ const sIdle = makeSlide(idleSteps.length, (step) => {
 
       <appear.div className="flex flex-col gap-4 w-[115ch]">
         <appear.div show={t("park")} className="text-4xl">
-          <H>Park</H> {CO}induciton
+          <H>Park</H> {CO}induction
         </appear.div>
+        <appear.p show={t("park")} className="text-2xl mx-4">
+          An invariant is <H>Park</H> if it is preserved by the loop body.
+        </appear.p>
         <appear.div>
           <LeanCode
             src={
@@ -204,13 +208,13 @@ const sIdle = makeSlide(idleSteps.length, (step) => {
                 `
 theorem ParkInduction {I : 𝔼[Γ, ENNReal]}
   -- \`I\` is a Park-invariant
-  (h : Ψ[wp[O]⟦C⟧] b φ I ≤ I) :
+  (h : Ψ b φ I ≤ I) :
     wp[O]⟦while b { C }⟧ φ ≤ I := ⋯
             `,
                 `
 theorem ParkCoinduction {I : ProbExp[Γ]}
   -- \`I\` is a Park-coinvariant
-  (h : I ≤ Ψ[wlp[O]⟦C⟧] b φ I) :
+  (h : I ≤ Ψ b φ I) :
     I ≤ wlp[O]⟦while b { C }⟧ φ := ⋯
             `,
               ][co]
@@ -222,11 +226,10 @@ theorem ParkCoinduction {I : ProbExp[Γ]}
           <H>Idle</H> {CO}
           <appear.span>induction</appear.span>
         </appear.div>
-        <appear.p show={t("idle desc")} className="text-2xl">
-          <H>Idle</H> {CO}induction is <H>Park</H> {CO}induction where states
-          that vary only over the modified <br /> variables with respect to an
-          initial state {tex`\sigma_0`} need to be considered for the inductive
-          invariant.
+        <appear.p show={t("idle desc")} className="text-2xl mx-4">
+          <H>Idle</H> is <H>Park</H> where states that vary only over the
+          modified variables with respect to an initial state {tex`\sigma_0`}{" "}
+          need to be considered for the inductive invariant.
         </appear.p>
         <appear.div
           show={t("idle example A") || t("idle example B")}
@@ -240,7 +243,7 @@ theorem ParkCoinduction {I : ProbExp[Γ]}
               src={`
 assert P(x) ;
 while ⋯
-  -- \`I\` has to assert P(x)
+  -- \`I\` and P(x)
   inv(I ∧ P(x))
 { ⋯ no assignments to x ⋯ } ;
 assert P(x)
@@ -273,14 +276,14 @@ assert P(x)
                 `
 theorem IdleInduction {σ₀ : State Γ} {I : 𝔼[Γ, ENNReal]}
   -- \`I\` is an Idle-invariant
-  (h : ∀ σ ∈ σ₀.EQ C.modsᶜ, Ψ[wp[O]⟦@C⟧] b φ I σ ≤ I σ) :
-    wp[O]⟦while @b { @C }⟧ φ σ₀ ≤ I σ₀ := ⋯
+  (h : ∀ σ ∈ {σ | ∀ v ∉ C.mods, σ v = σ₀ v}, Ψ b φ I σ ≤ I σ) :
+    wp[O]⟦while b { C }⟧ φ σ₀ ≤ I σ₀ := ⋯
 `,
                 `
 theorem IdleCoinduction {σ₀ : State Γ} {I : ProbExp[Γ]}
   -- \`I\` is an Idle-coinvariant
-  (h : ∀ σ ∈ σ₀.EQ C.modsᶜ, I σ ≤ Ψ[wlp[O]⟦@C⟧] b φ I σ) :
-    I σ₀ ≤ wlp[O]⟦while @b { @C }⟧ φ σ₀ := ⋯
+  (h : ∀ σ ∈ {σ | ∀ v ∉ C.mods, σ v = σ₀ v}, I σ ≤ Ψ b φ I σ) :
+    I σ₀ ≤ wlp[O]⟦while b { C }⟧ φ σ₀ := ⋯
 `,
               ][co]
             }
@@ -309,7 +312,7 @@ theorem IdleCoinduction {σ₀ : State Γ} {I : ProbExp[Γ]}
           className="text-4xl flex justify-between items-center"
         >
           <span>
-            Idle <H>k</H>-{CO}induciton
+            Idle <H>k</H>-{CO}induction
           </span>{" "}
           <span className="text-2xl">
             <Cite>Idle version of [Batz et al., CAV 2021]</Cite>
@@ -322,29 +325,19 @@ theorem IdleCoinduction {σ₀ : State Γ} {I : ProbExp[Γ]}
                 `
 theorem IdleKInduction {σ₀ : State Γ} {I : 𝔼[Γ, ENNReal]} (k : ℕ)
   -- \`I\` is an Idle k-invariant
-  (h : ∀ σ ∈ σ₀.EQ C.modsᶜ, Ψ[wp[O]⟦C⟧] b φ ((Ψ[wp[O]⟦C⟧] b φ · ⊓ I)^[k] I) σ ≤ I σ) :
+  (h : ∀ σ ∈ {σ | ∀ v ∉ C.mods, σ v = σ₀ v}, Ψ b φ ((Ψ b φ · ⊓ I)^[k] I) σ ≤ I σ) :
     wp[O]⟦while b { C }⟧ φ σ₀ ≤ I σ₀ := ⋯
     `,
                 `
 theorem IdleKCoinduction {σ₀ : State Γ} {I : ProbExp[Γ]} (k : ℕ)
   -- \`I\` is an Idle k-coinvariant
-  (h : ∀ σ ∈ σ₀.EQ C.modsᶜ, I σ ≤ Ψ[wlp[O]⟦C⟧] b φ ((Ψ[wlp[O]⟦C⟧] b φ · ⊓ I)^[k] I) σ) :
+  (h : ∀ σ ∈ {σ | ∀ v ∉ C.mods, σ v = σ₀ v}, I σ ≤ Ψ b φ ((Ψ b φ · ⊓ I)^[k] I) σ) :
     I σ₀ ≤ wlp[O]⟦while b { C }⟧ φ σ₀ := ⋯
     `,
               ][co]
             }
           />
         </appear.div>
-      </appear.div>
-    </div>
-  );
-});
-
-const sHeyVL = makeSlide(1, () => {
-  return (
-    <div className="flex justify-center flex-col items-center">
-      <appear.div className="text-6xl mb-10">
-        <H>Caesar</H> and <H>HeyVL</H>
       </appear.div>
     </div>
   );

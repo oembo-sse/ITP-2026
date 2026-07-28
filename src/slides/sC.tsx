@@ -156,7 +156,7 @@ export const sC = (sequence: State[]) =>
                 {tex`\Pr(s_1 \models \Diamond ${s2}) \quad=\quad \displaystyle \sum_{\pi \mem \Paths(s_1, ${s2})} \Prob(\pi)`}
               </appear.span>
               <appear.span show={state.compExp?.includes("eqSum")}>
-                {tex`\quad=\quad \displaystyle \sum_{i = 1} ½^{i}`}
+                {tex`\quad=\quad \displaystyle \sum_{1 \le i} ½^{i}`}
               </appear.span>
               <appear.span show={state.compExp?.includes("eq1")}>
                 {tex`\quad=\quad 1 \displaystyle \htmlClass{text-white}{\sum_{hello}}`}

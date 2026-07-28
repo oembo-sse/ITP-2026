@@ -51,7 +51,7 @@ impl LeanSyntax {
     pub fn highlight(&self, contents: &str) -> Result<Highlighted> {
         let mut h = HighlightLines::new(&self.syntax, &self.theme);
         let mut out = Highlighted { tokens: Vec::new() };
-        for line in LinesWithEndings::from(contents.trim()) {
+        for line in LinesWithEndings::from(contents) {
             let ranges = h.highlight_line(line, &self.ps).map_err(|e| eyre!(e))?;
 
             for (s, v) in ranges {

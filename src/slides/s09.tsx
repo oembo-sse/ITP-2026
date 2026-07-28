@@ -34,14 +34,12 @@ const wpDefNoMono = `def wp (O : Optimization) : pGCL Γ → 𝔼[Γ, ENNReal] �
   `;
 
 const wpShortDef = `def wp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
-  | pgcl {while b {C'}} => ⟨fun X ↦ lfp (Ψ[wp O C'] b X), ⋯⟩
-  | pgcl {observe(b)}   => ⟨(i[b] * ·), ⋯⟩
-  -- ... elided for brevity
+  wp[O]⟦while b {C}⟧ f := lfp (Ψ[wp[O]⟦C⟧] b f)
+  wp[O]⟦observe(b)⟧  f := i[b] * f
   `;
 const wfpPrimeDef = `def wfp : pGCL Γ → ProbExp Γ →o ProbExp Γ
-  | pgcl {while b {C'}} => ⟨fun X ↦ lfp (pΨ[wfp O C'] b X), ⋯⟩
-  | pgcl {observe(b)}   => ⟨(p[b] * · + (1 - p[b])), ⋯⟩
-  -- ... elided for brevity
+  wfp[O]⟦while b {C}⟧ f := lfp (pΨ[wfp[O]⟦C⟧] b f)
+  wfp[O]⟦observe(b)⟧  f := p[b] * f + (1 - p[b])
   `;
 const wfpDef = `def wfp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
   | pgcl {while b {C'}} => ⟨fun X ↦ lfp (Ψ[wfp O C'] b X), ⋯⟩
@@ -49,15 +47,15 @@ const wfpDef = `def wfp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
   -- ... elided for brevity
   `;
 const wlpPrimeDef = `def wlp : pGCL Γ → ProbExp Γ →o ProbExp Γ
-  | pgcl {while b {C'}} => ⟨fun X ↦ gfp (pΨ[wlp O C'] b X), ⋯⟩
-  | pgcl {observe(b)}   => ⟨(p[b] * ·), ⋯⟩
-  -- ... elided for brevity
+  wlp[O]⟦while b {C}⟧ f := gfp (pΨ[wlp[O]⟦C⟧] b f)
+  wlp[O]⟦observe(b)⟧  f := p[b] * f
   `;
 const wlpDef = `def wlp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal] :=
   fun C ↦ ⟨fun X ↦ wlp'[O]⟦C⟧ (X ⊓ 1), ⋯⟩`;
 const cwpDef = `
-def cwp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal] :=
-  fun C ↦ ⟨fun X ↦ wp[O]⟦C⟧ X / wlp[O]⟦C⟧ 1, ⋯⟩`;
+def cwp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
+  cwp[O]⟦C⟧ f := wp[O]⟦C⟧ f / wlp[O]⟦C⟧ 1
+`;
 
 const ExptDesc = (props: {
   name: React.ReactNode;
