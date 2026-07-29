@@ -400,9 +400,9 @@ export const s09 = makeSlide(steps.length + 1, () => {
       <appear.div className="flex justify-center flex-col items-center gap-4">
         <div className="text-3xl">
           <div className="text-3xl">
-            The <H>weakest preexpectation</H> transforms an expression to the{" "}
+            The <H>weakest preexpectation transformer</H> produces the{" "}
             <i>expectation</i> <br />
-            of that expression after executing the given program.
+            by structual induction on the program.
           </div>
         </div>
       </appear.div>
@@ -415,6 +415,14 @@ export const s09 = makeSlide(steps.length + 1, () => {
     </div>
   );
 });
+
+const Soundness = ({ show, src }: { show: boolean; src: string }) => (
+  <appear.div className="col-span-3 flex mt-1 items-start justify-center">
+    <appear.span show={show} className="bg-bg-50 flex p-4 rounded-xl shadow-xl">
+      <InlineLeanCode src={src} />
+    </appear.span>
+  </appear.div>
+);
 
 const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
   <>
@@ -429,42 +437,30 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
       lattice={<>{tex`\\ENNReal`}</>}
       tick={<>tick adds</>}
     />
-    <div className="col-span-full mb-4">
+    <div className="mb-4">
       <LeanCode src={wpShortDef} />
     </div>
+    <Soundness show src={identities.wp_eq_op} />
   </>,
-  <>
-    <ExptDesc
-      name={
-        <>
-          Weakest <i>liberal</i> preexpectation (over {tex`\\PReal`})
-        </>
-      }
-      fp={<>{tex`\\gfp`}</>}
-      fault={<>0</>}
-      lattice={<>{tex`\\PReal`}</>}
-      tick={<>tick ignored</>}
-    />
-    <div className="col-span-full mb-4">
-      <LeanCode src={wlpPrimeDef} />
-    </div>
-  </>,
-  // <>
-  //   <ExptDesc
-  //     name={
-  //       <>
-  //         Weakest <i>liberal</i> preexpectation
-  //       </>
-  //     }
-  //     fp={<>{tex`\\gfp`}</>}
-  //     fault={<>0</>}
-  //     lattice={<>{tex`\\ENNReal`}</>}
-  //     tick={<>tick ignored</>}
-  //   />
-  //   <div className="col-span-full mb-4">
-  //     <LeanCode src={wlpDef} />
-  //   </div>
-  // </>,
+  (delta: number) => (
+    <>
+      <ExptDesc
+        name={
+          <>
+            Weakest <i>liberal</i> preexpectation (over {tex`\\PReal`})
+          </>
+        }
+        fp={<>{tex`\\gfp`}</>}
+        fault={<>0</>}
+        lattice={<>{tex`\\PReal`}</>}
+        tick={<>tick ignored</>}
+      />
+      <div className="mb-4">
+        <LeanCode src={wlpPrimeDef} />
+      </div>
+      <Soundness show={4 < delta} src={identities.wfp_eq_op} />
+    </>
+  ),
   (delta: number) =>
     delta < 5 && (
       <appear.div className="col-span-full flex justify-center mb-6">
@@ -475,33 +471,35 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
           </p>
           {0 < delta && (
             <appear.p className="text-xl mt-1 w-[50ch]">
-              We introduce{" "}
               <H>
                 Weakest <i>fault-tolerant</i> preexpectation
-              </H>
-              , morally <em>treating observations faults as assumptions</em>.
+              </H>{" "}
+              morally <em>treats observations faults as assumptions</em>.
             </appear.p>
           )}
         </Callout>
       </appear.div>
     ),
   null,
-  <>
-    <ExptDesc
-      name={
-        <>
-          Weakest <i>fault-tolerant</i> preexpectation (over {tex`\\PReal`})
-        </>
-      }
-      fp={<>{tex`\\lfp`}</>}
-      fault={<>1</>}
-      lattice={<>{tex`\\PReal`}</>}
-      tick={<>tick ignored</>}
-    />
-    <div className="col-span-full mb-4">
-      <LeanCode src={wfpPrimeDef} />
-    </div>
-  </>,
+  (delta: number) => (
+    <>
+      <ExptDesc
+        name={
+          <>
+            Weakest <i>fault-tolerant</i> preexpectation (over {tex`\\PReal`})
+          </>
+        }
+        fp={<>{tex`\\lfp`}</>}
+        fault={<>1</>}
+        lattice={<>{tex`\\PReal`}</>}
+        tick={<>tick ignored</>}
+      />
+      <div className="mb-4">
+        <LeanCode src={wfpPrimeDef} />
+      </div>
+      <Soundness show={0 < delta} src={identities.wlp_eq_wfp} />
+    </>
+  ),
   (delta: number) =>
     delta < 3 && (
       <appear.div className="flex flex-col items-center">
@@ -561,38 +559,48 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
   //     <LeanCode src={wfpDef} />
   //   </div>
   // </>,
-  <>
-    <ExptDesc
-      name={
-        <>
-          <i>Conditional</i> weakest preexpectation
-        </>
-      }
-      fp={<>{tex`\\lfp \\text{ and } \\gfp`}</>}
-      fault={<>0</>}
-      lattice={<>{tex`\\ENNReal`}</>}
-      tick={<>tick added</>}
-    />
-    <div className="col-span-full mb-4">
-      <LeanCode src={cwpDef} />
-    </div>
-  </>,
-  <appear.div className="flex flex-col items-center">
-    <Callout title={<>Interpretation of {tex`\cwp{C}`}</>}>
-      <div className="flex flex-col gap-2">
-        <p className="text-xl">Normalize by discarding faulted states.</p>
+  (delta: number) => (
+    <>
+      <ExptDesc
+        name={
+          <>
+            <i>Conditional</i> weakest preexpectation
+          </>
+        }
+        fp={<>{tex`\\lfp \\text{ and } \\gfp`}</>}
+        fault={<>0</>}
+        lattice={<>{tex`\\ENNReal`}</>}
+        tick={<>tick added</>}
+      />
+      <div className="mb-4">
+        <LeanCode src={cwpDef} />
       </div>
-    </Callout>
-  </appear.div>,
-  <appear.div className="col-span-3 flex flex-col items-center">
-    <Callout title={<>Soundness of {tex`\cwp{C}`}</>}>
-      <div className="flex flex-col gap-2">
-        <p className="text-xl">
-          Defined in terms of grounded expectation transformers.
-        </p>
-      </div>
-    </Callout>
-  </appear.div>,
+      <Soundness show={1 < delta} src={identities.cwp_eq_wp_wlp} />
+    </>
+  ),
+  (delta: number) =>
+    delta < 2 && (
+      <appear.div className="flex flex-col items-center mt-4">
+        <Callout title={<>Interpretation of {tex`\cwp{C}`}</>}>
+          <div className="flex flex-col gap-2">
+            <p className="text-xl">Normalize by discarding faulted states.</p>
+          </div>
+        </Callout>
+      </appear.div>
+    ),
+  (delta: number) =>
+    delta < 1 && (
+      <appear.div className="col-span-3 flex flex-col items-center mt-4">
+        <Callout title={<>Soundness of {tex`\cwp{C}`}</>}>
+          <div className="flex flex-col gap-2">
+            <p className="text-xl">
+              Defined in terms of grounded expectation transformers.
+            </p>
+          </div>
+        </Callout>
+      </appear.div>
+    ),
+  null,
 ];
 
 export const sZoo = makeSlide(zooSteps.length + 1, () => {
@@ -607,7 +615,7 @@ export const sZoo = makeSlide(zooSteps.length + 1, () => {
         </AnimatePresence>
       </div>
       {/* <LeanCode src={wpDef} /> */}
-      <div className="grid grid-cols-[1fr_18ch_20ch_5ch] gap-x-10 w-[135ch]">
+      <div className="grid grid-cols-[70ch_18ch_20ch_5ch] gap-x-10 w-[135ch]">
         <appear.div className="text-xl">
           <H>Name</H>
         </appear.div>

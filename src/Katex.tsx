@@ -93,6 +93,7 @@ export const Katex: React.FC<{ src: string }> = ({ src }) => {
             "\\iver": "[#1]",
             "\\rew": "\\text{rew}^{#1}",
             "\\H": "\\htmlClass{text-fg-600}{#1}",
+            "\\dontoverset": "\\htmlClass{hidden}{#1}",
           },
         });
       } catch (e) {

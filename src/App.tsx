@@ -73,7 +73,8 @@ const sConnection = (
     const n = {
       pGCL_op: 3 - start,
       pGCL_wp: 3 - start,
-      HeyVL: 4 - start,
+      pGCL_proof_rules: 4 - start,
+      HeyVL: 5 - start,
       MDP: 2 - start,
       MC: 1 - start,
     };
@@ -93,7 +94,7 @@ const sConnection = (
 
           <Arrows
             from={Math.max(n.MC, n.MDP)}
-          >{tex`\\overset{${Math.max(n.MC, n.MDP) - 1 + start}}{\\Longleftarrow}`}</Arrows>
+          >{tex`\\dontoverset{${Math.max(n.MC, n.MDP) - 1 + start}}{\\Longleftarrow}`}</Arrows>
 
           <div>
             <Domain from={n.MDP}>MDP</Domain>
@@ -104,7 +105,7 @@ const sConnection = (
 
           <Arrows
             from={Math.max(n.MDP, n.pGCL_op)}
-          >{tex`\\overset{${Math.max(n.MDP, n.pGCL_op) - 1 + start}}\\Longleftarrow`}</Arrows>
+          >{tex`\\dontoverset{${Math.max(n.MDP, n.pGCL_op) - 1 + start}}\\Longleftarrow`}</Arrows>
 
           <appear.div>
             <Domain id="pGCL" from={Math.min(n.pGCL_op, n.pGCL_wp)}>
@@ -117,7 +118,7 @@ const sConnection = (
               </Description>
               <Arrows
                 from={Math.max(n.pGCL_wp)}
-              >{tex`\\overset{${Math.max(n.pGCL_wp) - 1 + start}}\\Longleftrightarrow`}</Arrows>
+              >{tex`\\dontoverset{${Math.max(n.pGCL_wp) - 1 + start}}\\Longleftrightarrow`}</Arrows>
               <Description from={n.pGCL_wp}>
                 Denotational <br /> semantics
               </Description>
@@ -125,8 +126,19 @@ const sConnection = (
           </appear.div>
 
           <Arrows
-            from={Math.max(n.HeyVL, n.pGCL_wp)}
-          >{tex`\\overset{${Math.max(n.HeyVL, n.pGCL_wp) - 1 + start}}\\Longrightarrow`}</Arrows>
+            from={Math.max(n.pGCL_proof_rules, n.pGCL_wp)}
+          >{tex`\\dontoverset{${Math.max(n.pGCL_proof_rules, n.pGCL_wp) - 1 + start}}\\Longrightarrow`}</Arrows>
+
+          <div>
+            <Domain from={n.pGCL_proof_rules}>Proof rules</Domain>
+            <Description from={n.pGCL_proof_rules}>
+              Invariant based <br /> reasoning
+            </Description>
+          </div>
+
+          <Arrows
+            from={Math.max(n.HeyVL, n.pGCL_proof_rules)}
+          >{tex`\\dontoverset{${Math.max(n.HeyVL, n.pGCL_proof_rules) - 1 + start}}\\Longrightarrow`}</Arrows>
 
           <div>
             <Domain from={n.HeyVL}>HeyVL</Domain>
@@ -135,7 +147,7 @@ const sConnection = (
             </Description>
           </div>
         </div>
-        <appear.div from={Math.max(...Object.values(n)) + 1}>
+        {/* <appear.div from={Math.max(...Object.values(n)) + 1}>
           <h1>Contributions:</h1>
           <ol>
             <li>
@@ -153,7 +165,7 @@ const sConnection = (
               {tex`\\overset{${n.HeyVL}}{\\Longrightarrow}`}: New contribution
             </li>
           </ol>
-        </appear.div>
+        </appear.div> */}
       </div>
     );
   });
@@ -450,14 +462,15 @@ const sRelatedWork = makeSlide(1, () => {
   );
 });
 
-const sCaesarOverview = makeSlide(6, (step) => {
+const sCaesarOverview = makeSlide(7, (step) => {
   const n = {
     rules: 1,
     heyvl: 0,
     smt: 2,
     storm: 3,
     lean: 4,
-    encodingLean: 5,
+    proveLean: 5,
+    encodingLean: 6,
   };
 
   return (
@@ -527,9 +540,9 @@ const sCaesarOverview = makeSlide(6, (step) => {
           className="border row-start-5 rounded-xl shadow-xl bg-bg-50 relative flex justify-center overflow-hidden"
         >
           <div
-            className={`z-0 absolute inset-0 transition ${n.encodingLean <= step ? "bg-fg-600" : ""}`}
+            className={`z-0 absolute inset-0 transition ${n.proveLean <= step ? "bg-fg-600" : ""}`}
           ></div>
-          <div className={`z-10 ${n.encodingLean <= step ? "text-white" : ""}`}>
+          <div className={`z-10 ${n.proveLean <= step ? "text-white" : ""}`}>
             Interactive Proofs <br /> (Lean)
           </div>
         </appear.div>
@@ -678,7 +691,7 @@ while stop = 0 {
   sCaesarOverview,
   sCaesarProofRules,
 
-  sConnection(0, 5),
+  sConnection(0, 6),
 
   sRelatedWork,
   // introduce mc without costs, show cylinder basis with ionesco*, add costs define expected costs, add nondet to give mdps therefor minimize ec
@@ -710,10 +723,10 @@ while stop = 0 {
   sExp2,
   sZoo,
   sIdle,
-  sConnection(3, 5),
+  sConnection(4, 6),
   // caeser deep embedding (substitution), showing Theorem 41. and 42.
   sHeyVL,
-  sConnection(4, 5, <>have covered</>),
+  sConnection(5, 6, <>have covered</>),
   // related work
   // conclusion
 

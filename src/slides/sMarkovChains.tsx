@@ -21,7 +21,6 @@ const steps: Part[][] = [
   ["def"],
   ["def", "path", "inf path"],
   ["def", "path", "inf path", "pref", "cyl"],
-  ["path pmf"],
   ["path pmf", "path measure"],
   ["path pmf", "path measure", "mathlib"],
   ["path pmf", "path measure", "mathlib", "lifted"],
@@ -36,16 +35,8 @@ const steps: Part[][] = [
     "measure cyl",
     "Pr_cyl",
   ],
-  [
-    "path pmf",
-    "path measure",
-    "mathlib",
-    "lifted",
-    "embed",
-    "measure cyl",
-    "Pr_cyl",
-    "observation",
-  ],
+  ["pref", "cyl", "mathlib", "Pr_cyl"],
+  ["pref", "cyl", "mathlib", "Pr_cyl", "observation"],
 ];
 
 export const sMarkovChains = makeSlide(steps.length, (step) => {

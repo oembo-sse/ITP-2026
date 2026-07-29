@@ -40,10 +40,10 @@ while x > 0 {
 while x > 0 {
   @l2 { x := x - 1 } [1/2] { @xp x := x + 1$ }$
 }`,
-  `@l1 x := 0$ ; @b stop := 0$ ;
-while stop = 0 {
-  @l2 { stop := 1 } [1/2] { @xp x := x + 1$ }$
-}`,
+  //   `@l1 x := 0$ ; @b stop := 0$ ;
+  // while stop = 0 {
+  //   @l2 { stop := 1 } [1/2] { @xp x := x + 1$ }$
+  // }`,
   //   `@l1 x := 1$ ; @b stop := 0$ ;
   // while stop = 0 {
   //   @l2 { stop := 1 } [1/2] { @xp x := x * 2$ }$
