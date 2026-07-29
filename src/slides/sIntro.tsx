@@ -30,9 +30,9 @@ const eqFin = tex`=^{\tiny f}`;
 
 export const Sponsors = () => (
   <appear.div className="flex gap-10">
-    <appear.img to={1} src={DTU} className="w-12 mt-10" />
-    <appear.img to={1} src={OLDENBURG} className="w-32 mt-10" />
-    <appear.img to={1} src={DFF} className="w-32 mt-10" />
+    <appear.img src={DTU} className="w-12 mt-10" />
+    <appear.img src={OLDENBURG} className="w-32 mt-10" />
+    <appear.img src={DFF} className="w-32 mt-10" />
   </appear.div>
 );
 
