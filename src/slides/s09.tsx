@@ -458,7 +458,7 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
       <div className="mb-4">
         <LeanCode src={wlpPrimeDef} />
       </div>
-      <Soundness show={4 < delta} src={identities.wfp_eq_op} />
+      <Soundness show={4 < delta} src={identities.wlp_eq_wfp} />
     </>
   ),
   (delta: number) =>
@@ -497,7 +497,7 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
       <div className="mb-4">
         <LeanCode src={wfpPrimeDef} />
       </div>
-      <Soundness show={0 < delta} src={identities.wlp_eq_wfp} />
+      <Soundness show={0 < delta} src={identities.wfp_eq_op} />
     </>
   ),
   (delta: number) =>

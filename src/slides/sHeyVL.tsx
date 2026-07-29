@@ -57,7 +57,9 @@ theorem vp_le_wlp (C : spGCL) (φ : HeyLo)
   NatLog: `
 def NatLog := vc[𝒟, wp]
   { [0 < y] * ↑(y + nlog2(y)) }
-    while 0 < y inv([0 < y] * ↑(y + nlog2(y))) {
+    while 0 < y
+      inv([0 < y] * ↑(y + nlog2(y)))
+    {
       {
         y := y / 2
       } [1/2] {

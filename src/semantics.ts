@@ -89,10 +89,10 @@ export const identities = {
   // | 𝒟 => ⟨fun C ↦ ⟨fun X σ ↦ ⨅ 𝒮, ⨆ n, EC (𝕊.cost X) 𝒮 n conf[C, σ], ⋯⟩, ⋯⟩
   // -- angelic optimization: maximize by way of ⊔ (supremum)
   // | 𝒜 => ⟨fun C ↦ ⟨fun X σ ↦ ⨆ 𝒮, ⨆ n, EC (𝕊.cost X) 𝒮 n conf[C, σ], ⋯⟩, ⋯⟩`,
-  wp_eq_op: `wp[O]⟦C⟧ X = op[O]⟦C⟧ X`,
+  wp_eq_op: `wp[O]⟦C⟧ X = (lfp ξ[O])⟦C⟧ = op[O]⟦C⟧ X`,
   cwp_eq_wp_wlp: `cwp[O]⟦C⟧ X = wp[O]⟦C⟧ X / wlp[O]⟦C⟧ 1`,
   wlp_eq_wfp: `wlp[O]⟦C⟧ f = 1 - wfp[Oᶜ]⟦C⟧ (1 - f)`,
-  wfp_eq_op: `wfp[O]⟦C⟧ X = op[O]⟦C⟧ X`,
+  wfp_eq_op: `wfp[O]⟦C⟧ X = (lfp ξ[O])⟦C⟧ = op[O]⟦C⟧ X`,
   gfp_eq_lfp: `gfp f = 1 - lfp ⟨fun x ↦ 1 - f (1 - x), ⋯⟩`,
   opt_def: `inductive Optimization where
   /-- Maximize by way of ⊔ (supremum), written 𝒜. -/

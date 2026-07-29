@@ -3,7 +3,7 @@ import { buildSlides, makeSlide, useSlidesBase } from "./hooks";
 import { appear, SlidesContext, useSlide } from "./slides";
 import { sIntro } from "./slides/sIntro";
 import { s01 } from "./slides/s01";
-import { s04 } from "./slides/s04";
+import { programs, rawPrograms, s04 } from "./slides/s04";
 import { s00 } from "./slides/s00";
 import { s90 } from "./slides/s90";
 import { s10 } from "./slides/s10";
@@ -669,22 +669,23 @@ const SLIDES = buildSlides([
   sIntro,
   // random walk infinite ast but ert = \infty, subtle
   s04,
-  s00(
-    `x := 5 ;
-sum := 0 ;
-while x > 0 {
-  { x := x - 1 } [1/2] { x := x - 2 } ;
-  sum := sum + x
-}`,
-    ["x", "sum"],
-  ),
-  s00(
-    `x := 1 ; stop := 0 ;
-while stop = 0 {
-  { stop := 1 } [1/2] { x := x + 1 }
-}`,
-    ["x", "stop"],
-  ),
+  ...rawPrograms.map((code) => s00(code, ["x", "sum"])),
+  //   s00(
+  //     `x := 5 ;
+  // sum := 0 ;
+  // while x > 0 {
+  //   { x := x - 1 } [1/2] { x := x - 2 } ;
+  //   sum := sum + x
+  // }`,
+  //     ["x", "sum"],
+  //   ),
+  //   s00(
+  //     `x := 1 ; stop := 0 ;
+  // while stop = 0 {
+  //   { stop := 1 } [1/2] { x := x + 1 }
+  // }`,
+  //     ["x", "stop"],
+  //   ),
   // caeser automated verification of ppl, related "motivation", this has been studied very heaviliy
 
   sMotivation,
@@ -712,11 +713,16 @@ while stop = 0 {
   s02,
   // park -> idle -> idle k-induct
   s00(
-    `x := 1 ; stop := 0 ;
-    while stop = 0 {
-      { stop := 1 } [1/2] { x := x + 1 }
-      }`,
-    ["x", "stop"],
+    `x := 2 ;
+while x > 0 {
+  {
+    x := x - 1
+  } [1/2] {
+    skip
+  } ;
+  sum := sum + x
+}`,
+    ["x", "sum"],
   ),
   sExp,
   s09,

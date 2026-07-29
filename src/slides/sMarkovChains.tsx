@@ -153,7 +153,7 @@ def Path.lifted : Measure ((π : M.Path) → π.succs) := Measure.infinitePi Pat
         <appear.div show={t("embed")}>
           <LeanCode
             src={`
-/-- Embed dependent finite path successors into infinite pahts. -/
+/-- Embed dependent finite path successors into infinite paths. -/
 def embed (f : (π : M.Path) → π.succs) : M.InfPath := ⋯
 `}
           />
