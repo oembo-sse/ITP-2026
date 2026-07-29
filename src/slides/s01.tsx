@@ -15,14 +15,13 @@ const steps = [
   //   given memory.
   // </div>,
   <div className="flex justify-center flex-col items-center gap-4">
-    <div className="text-3xl">The grammar of {tex`\\pGCL`} is given by</div>
     <div className="text-3xl">{grammar[0]}</div>
   </div>,
   <div className="flex justify-center flex-col items-center gap-4">
     <div className="text-3xl text-center">
       {tex`A`} is an arbitrary {tex`\\Expr`}, <br /> {tex`p`} is an{" "}
-      {tex`\\Expr`} which is bounded by 0 and 1, <br />
-      {tex`B`} is a predicate evaluated in a memory.
+      {tex`\\Expr`} bounded by 0 and 1, <br />
+      {tex`B`} is a Boolean predicate.
     </div>
   </div>,
   null,

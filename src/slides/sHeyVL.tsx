@@ -18,6 +18,21 @@ def spGCL.enc (C : spGCL) (O : Optimization) (E : Encoding) :
   wlp: `    | .wlp => (G, heyvl {
       assert(I) ; havocs(C.mods) ; validate ; assume(I) ;
       if (b) { C ; assert(I) ; assume(0) } })`,
+  wlp1: `enc⟦while b inv(I) {C}⟧ :=`,
+  wlp2: `
+  (G, heyvl {
+              assert(I) ;
+              -- havoc only modified variables using Idle-induction
+              -- improves original encoding from [Schröer et al. 2023]
+              havocs(C.mods) ;
+              validate ;
+              assume(I) ;
+              if (b) {
+                C ;
+                assert(I) ;
+                assume(0)
+              }
+  })`,
   wp: `    | .wp => (G, heyvl {
       coassert(I) ; cohavocs(C.mods) ; covalidate ; coassume(I) ;
       if (b) { C ; coassert(I) ; coassume(⊤) } })`,
@@ -44,13 +59,12 @@ theorem vp_le_wlp (C : spGCL) (φ : HeyLo)
 type Part = "setup" | "def" | "prob" | "loop" | "wlp" | "wp" | "rest" | "sound";
 const steps: Part[][] = [
   //
-  [],
+  ["setup"],
+  ["setup", "def"],
   ["def"],
   ["def", "prob"],
-  ["def", "prob", "loop"],
-  ["def", "prob", "loop", "wlp"],
   ["def", "prob", "loop", "wlp", "wp"],
-  ["def", "prob", "loop", "wlp", "wp", "rest"],
+  ["wlp"],
   ["def", "loop", "wlp", "wp", "rest"],
   ["def", "loop", "wlp", "wp", "rest", "sound"],
 ];
@@ -65,28 +79,29 @@ export const sHeyVL = makeSlide(steps.length, (step) => {
       </appear.div>
 
       <appear.div className="w-[120ch] flex flex-col gap-4">
-        <appear.div className="text-2xl">
+        <appear.div show={t("setup")} className="text-2xl">
           • {tex`\HeyLo`} (read <em>Heyting Logic</em>) is a deeply embedded
           expression language
         </appear.div>
-        <appear.div className="text-2xl">
-          • {tex`\HeyVL`} (read <em>Heyting Verification Language</em>) is a
-          probabilistic modelling language
+        <appear.div show={t("setup")} className="text-2xl">
+          {/* (read <em>Heyting Verification Language</em>) */}• {tex`\HeyVL`}{" "}
+          is a <em>loop-free</em> quantitative intermediate verification
+          language
         </appear.div>
-        <appear.div className="text-2xl">
+        <appear.div show={t("setup")} className="text-2xl">
           • We introduce {tex`\spGCL`} as a <em>syntatic deep embedding</em> of{" "}
           {tex`\pGCL`} with {tex`\HeyLo`} expressions
         </appear.div>
-        <appear.div className="text-2xl">
+        <appear.div show={t("setup")} className="text-2xl">
           • {tex`\spGCL`} naturally embeds into {tex`\pGCL`} by giving
           interpretation to {tex`\HeyLo`} expressions
         </appear.div>
 
-        <appear.div show={t("def")}>
-          <span className="text-2xl">
-            • {tex`\spGCL`} embeds into {tex`\HeyLo`} by <H>encoding</H>
-          </span>
-          <appear.div show={t("def")} className="mx-10">
+        <appear.div show={t("def") || t("loop") || t("wlp") || t("wp")}>
+          <appear.span show={t("setup")} className="text-2xl">
+            • {tex`\spGCL`} embeds into {tex`\HeyVL`} by <H>encoding</H>
+          </appear.span>
+          <appear.div className="mx-10">
             <appear.div show={t("def")}>
               <LeanCode src={samples.def} />
             </appear.div>
@@ -96,8 +111,11 @@ export const sHeyVL = makeSlide(steps.length, (step) => {
             <appear.div className="mt-4" show={t("loop")}>
               <LeanCode src={samples.loop} noTrim />
             </appear.div>
+            <appear.div show={t("wlp") && !t("loop")}>
+              <LeanCode src={samples.wlp1} noTrim />
+            </appear.div>
             <appear.div show={t("wlp")}>
-              <LeanCode src={samples.wlp} noTrim />
+              <LeanCode src={t("loop") ? samples.wlp : samples.wlp2} noTrim />
             </appear.div>
             <appear.div show={t("wp")}>
               <LeanCode src={samples.wp} noTrim />

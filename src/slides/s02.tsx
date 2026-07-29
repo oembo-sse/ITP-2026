@@ -29,9 +29,9 @@ inductive Step : Conf₀ Γ → Act → ENNReal → Conf₁ Γ → Prop where
 `;
 
 const steps = [
-  <div className="text-3xl">
-    An <H>operational semantics</H> defines how a program is executed.
-  </div>,
+  // <div className="text-3xl">
+  //   An <H>operational semantics</H> defines how a program is executed.
+  // </div>,
   <div className="text-3xl">
     A configuration {tex`\\Conf : \\pGCL \\times \\Mem`} is the combination{" "}
     <br />
@@ -59,13 +59,13 @@ const steps = [
       </div>
     ),
   <LeanCode src={smallStepCode} />,
+  // inductive Termination where
+  //   /-- Faulted termination due to observation failure, denoted by ↯. -/
+  //   | fault
+  //   /-- Partial termination, denoted by ⇓. -/
+  //   | term
   <LeanCode
     src={`
-inductive Termination where
-  /-- Faulted termination due to observation failure, denoted by ↯. -/
-  | fault
-  /-- Partial termination, denoted by ⇓. -/
-  | term
 instance : SmallStepSemantics (pGCL Γ) (State Γ) Termination Act := 𝕊 cost_t cost_p
     `}
   />,

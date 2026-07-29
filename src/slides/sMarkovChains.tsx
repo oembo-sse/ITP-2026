@@ -54,7 +54,7 @@ export const sMarkovChains = makeSlide(steps.length, (step) => {
   return (
     <div className="flex justify-center flex-col">
       <appear.div className="text-6xl mb-10 text-center">
-        <H>Markov Chain in Lean</H>
+        <H>Markov Chains in Lean</H>
       </appear.div>
       <appear.div className="flex flex-col gap-4">
         <appear.div show={t("def")} className="text-4xl">
@@ -88,7 +88,7 @@ structure InfPath (M : MarkovChain State) where
           />
         </appear.div>
         <appear.div show={t("cyl")} className="text-4xl">
-          Path cylinders
+          Path cylinders: towards a probability space
         </appear.div>
         <appear.div show={t("cyl")}>
           <LeanCode

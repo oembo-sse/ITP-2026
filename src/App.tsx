@@ -67,7 +67,7 @@ const Arrows = ({
 const sConnection = (
   start: number,
   end: number,
-  word: React.ReactNode = "will cover",
+  word: React.ReactNode = "formalized",
 ) =>
   makeSlide(end - start, () => {
     const n = {
@@ -198,9 +198,9 @@ const sIdle = makeSlide(idleSteps.length, (step) => {
         <appear.div show={t("park")} className="text-4xl">
           <H>Park</H> {CO}induction
         </appear.div>
-        <appear.p show={t("park")} className="text-2xl mx-4">
+        {/* <appear.p show={t("park")} className="text-2xl mx-4">
           An invariant is <H>Park</H> if it is preserved by the loop body.
-        </appear.p>
+        </appear.p> */}
         <appear.div>
           <LeanCode
             src={
@@ -227,15 +227,17 @@ theorem ParkCoinduction {I : ProbExp[Γ]}
           <appear.span>induction</appear.span>
         </appear.div>
         <appear.p show={t("idle desc")} className="text-2xl mx-4">
-          <H>Idle</H> is <H>Park</H> where states that vary only over the
+          {/* <H>Idle</H> is <H>Park</H> where states that vary only over the
           modified variables with respect to an initial state {tex`\sigma_0`}{" "}
-          need to be considered for the inductive invariant.
+          need to be considered for the inductive invariant. */}
+          <H>Idle</H> is <H>Park</H> with respect initial state {tex`\sigma_0`},
+          where unmodified variables are static.
         </appear.p>
         <appear.div
           show={t("idle example A") || t("idle example B")}
           className="flex place-content-center gap-6 mb-4"
         >
-          <appear.div className="rounded-xl shadow-xl bg-bg-50 p-4 w-[40ch]">
+          <appear.div className="rounded-xl shadow-xl bg-bg-50 p-4 w-[52ch]">
             <p className="text-2xl mb-2">
               Using <H>Park</H>-induction
             </p>
@@ -243,7 +245,7 @@ theorem ParkCoinduction {I : ProbExp[Γ]}
               src={`
 assert P(x) ;
 while ⋯
-  -- \`I\` and P(x)
+  -- P(x) needs to be stated explicitly
   inv(I ∧ P(x))
 { ⋯ no assignments to x ⋯ } ;
 assert P(x)
@@ -251,7 +253,7 @@ assert P(x)
             />
           </appear.div>
           <appear.div
-            className="rounded-xl shadow-xl bg-bg-50 p-4 w-[60ch]"
+            className="rounded-xl shadow-xl bg-bg-50 p-4 w-[55ch]"
             show={t("idle example B")}
           >
             <p className="text-2xl mb-2">
@@ -261,7 +263,7 @@ assert P(x)
               src={`
 assert P(x) ;
 while ⋯
-  -- \`I\` can assume P(x) using Idle-induction
+  -- can assume P(x) using Idle-induction
   idle-inv(I)
 { ⋯ no assignments to x ⋯ } ;
 assert P(x)
@@ -291,18 +293,16 @@ theorem IdleCoinduction {σ₀ : State Γ} {I : ProbExp[Γ]}
         </appear.div>
         <appear.div show={t("idle comment")} className="flex justify-center">
           <div className="w-[80ch]">
-            <Callout title="This required new proof methods!">
-              <p className="text-xl mb-4">
-                Similar proof rules as <H>Idle</H>-induction exists for
-                classical PV but proofs use strongest postcondition transformers
-                where{" "}
-                <em>postexpectation transformers does not exist for PPs</em>{" "}
+            <Callout title="Challenge">
+              <p className="text-xl">
+                Proof needs to be via <H>backward reasoning</H>; <br /> Why?
+                Strongest postexpectations do not exist{" "}
                 <Cite>[Jones 1990]</Cite>.
               </p>
-              <p className="text-xl">
+              {/* <p className="text-xl">
                 To the best of our knowledge this is the first proof of such a
                 claim using <H>backwards reasoning</H> weakest preexpectation.
-              </p>
+              </p> */}
             </Callout>
           </div>
         </appear.div>
@@ -315,7 +315,7 @@ theorem IdleCoinduction {σ₀ : State Γ} {I : ProbExp[Γ]}
             Idle <H>k</H>-{CO}induction
           </span>{" "}
           <span className="text-2xl">
-            <Cite>Idle version of [Batz et al., CAV 2021]</Cite>
+            <Cite>Refined version of [Batz et al., CAV 2021]</Cite>
           </span>
         </appear.div>
         <appear.div show={t("k ind")}>
@@ -397,12 +397,14 @@ const sMotivation = makeSlide(1, () => {
 
 const sRelatedWork = makeSlide(1, () => {
   return (
-    <appear.div className="w-[120ch] gap-4 flex flex-col">
-      <h1 className="text-5xl flex justify-between">
+    <appear.div className="w-[120ch] gap-16 flex flex-col">
+      {/* <h1 className="text-5xl flex justify-between">
         <H>Related Work</H>
-      </h1>
+      </h1> */}
       <div>
-        <h2 className="text-3xl mb-1">Related formalizations</h2>
+        <h2 className="text-4xl mb-1">
+          <H>Related formalizations</H>
+        </h2>
         <p className="text-2xl flex flex-col gap-x-2 ml-6">
           <p>
             • MDPs: <Cite>[Hölzl 2017]</Cite>
@@ -422,7 +424,9 @@ const sRelatedWork = makeSlide(1, () => {
         </p>
       </div>
       <div>
-        <h2 className="text-3xl mb-1">This work</h2>
+        <h2 className="text-4xl mb-1">
+          <H>This work</H>
+        </h2>
         <p className="text-2xl flex flex-wrap gap-x-2 ml-6 relative">
           <p>
             • A deep embedding of Caesar’s intermediate verification language

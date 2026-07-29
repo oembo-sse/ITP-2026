@@ -73,9 +73,11 @@ export const sequenceB: State[] = [
   {
     basic: false,
     ExpDef: void 0,
-    ECDef: "extended",
+    ECDef: void 0,
     compExp: void 0,
   },
+  { ECDef: "just" },
+  { ECDef: "extended" },
   { compG: ["ECG", "eq?"] },
   { compG: ["ECG", "sup", "eq?"] },
   { compG: ["ECG", "sup", "inf", "eq?"] },
@@ -321,11 +323,11 @@ export const sC = (sequence: State[]) =>
           `}</appear.span>
             </appear.div>
 
-            <appear.div show={state.showBellman?.includes("lfp?")}>
+            {/* <appear.div show={state.showBellman?.includes("lfp?")}>
               <appear.span>
                 Solution to of system of equation as a least fixed-point
               </appear.span>
-            </appear.div>
+            </appear.div> */}
             <appear.div show={state.showBellman?.includes("lfp?")}>
               <Callout title="Theorem 19">
                 <div className="text-2xl">For finite branching MDPs</div>
@@ -396,16 +398,16 @@ export const sC = (sequence: State[]) =>
             <appear.div className="flex gap-10">
               <appear.div>
                 {state.basic
-                  ? tex`\P(s_1, ${state.ECDef ? "\\alpha," : ""} s_1) = ½`
-                  : tex`\P(s_1, ${state.ECDef ? "\\alpha," : ""} s_1) = p(\alpha)`}
+                  ? tex`\P(s_1, ${!state.basic ? "\\alpha," : ""} s_1) = ½`
+                  : tex`\P(s_1, ${!state.basic ? "\\alpha," : ""} s_1) = p(\alpha)`}
               </appear.div>
               <appear.div>
                 {state.basic
-                  ? tex`\P(s_1, ${state.ECDef ? "\\alpha," : ""} ${s2}) = ½`
-                  : tex`\P(s_1, ${state.ECDef ? "\\alpha," : ""} ${s2}) = 1-p(\alpha)`}
+                  ? tex`\P(s_1, ${!state.basic ? "\\alpha," : ""} ${s2}) = ½`
+                  : tex`\P(s_1, ${!state.basic ? "\\alpha," : ""} ${s2}) = 1-p(\alpha)`}
               </appear.div>
-              <appear.div>{tex`\P(${s2}, ${state.ECDef ? "\\_," : ""} s_3) = 1`}</appear.div>
-              <appear.div>{tex`\P(s_3, ${state.ECDef ? "\\_," : ""} s_3) = 1`}</appear.div>
+              <appear.div>{tex`\P(${s2}, ${!state.basic ? "\\_," : ""} s_3) = 1`}</appear.div>
+              <appear.div>{tex`\P(s_3, ${!state.basic ? "\\_," : ""} s_3) = 1`}</appear.div>
             </appear.div>
           </appear.div>
         </appear.div>

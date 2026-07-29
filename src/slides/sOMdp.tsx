@@ -16,9 +16,9 @@ const steps: Part[][] = [
   ["mdp def"],
   ["mdp def", "ec"],
   ["mdp def", "ec", "small step class"],
-  ["mdp def", "ec", "small step class", "def op"],
-  ["mdp def", "ec", "small step class", "def op", "def ξ"],
-  ["mdp def", "ec", "small step class", "def op", "def ξ", "op eq lfp ξ"],
+  ["def op"],
+  ["def op", "def ξ"],
+  ["def op", "def ξ", "op eq lfp ξ"],
 ];
 
 export const sOMdp = makeSlide(steps.length, (step) => {

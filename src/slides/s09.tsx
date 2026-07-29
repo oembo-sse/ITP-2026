@@ -22,7 +22,7 @@ const wpDef = `def wp (O : Optimization) : pGCL Γ → 𝔼[Γ, ENNReal] →o �
   | pgcl {while @b {@C'}} => ⟨fun X ↦ lfp (Ψ[wp O C'] b X), fun ⦃_ _⦄ _ ↦ by simp; gcongr⟩
   | pgcl {tick(@e)} => ⟨(e + ·), fun ⦃_ _⦄ _ ↦ by simp; gcongr⟩
   | pgcl {observe(@b)} => ⟨(i[b] * ·), fun ⦃_ _⦄ _ ↦ by simp; gcongr⟩`;
-const wpDefNoMono = `def wp (O : Optimization) : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
+const wpDefNoMono = `def wp[O] : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
   | pgcl {skip}          => ⟨fun X ↦ X, ⋯⟩
   | pgcl {x := A}        => ⟨fun X ↦ X[x ↦ A], ⋯⟩
   | pgcl {C₁; C₂}        => OrderHom.comp (C₁.wp O) (C₂.wp O)
@@ -33,27 +33,27 @@ const wpDefNoMono = `def wp (O : Optimization) : pGCL Γ → 𝔼[Γ, ENNReal] �
   | pgcl {observe(b)}    => ⟨(i[b] * ·), ⋯⟩
   `;
 
-const wpShortDef = `def wp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
+const wpShortDef = `def wp[O] : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
   wp[O]⟦while b {C}⟧ f := lfp (Ψ[wp[O]⟦C⟧] b f)
   wp[O]⟦observe(b)⟧  f := i[b] * f
   `;
-const wfpPrimeDef = `def wfp : pGCL Γ → ProbExp Γ →o ProbExp Γ
+const wfpPrimeDef = `def wfp[O] : pGCL Γ → ProbExp Γ →o ProbExp Γ
   wfp[O]⟦while b {C}⟧ f := lfp (pΨ[wfp[O]⟦C⟧] b f)
   wfp[O]⟦observe(b)⟧  f := p[b] * f + (1 - p[b])
   `;
-const wfpDef = `def wfp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
+const wfpDef = `def wfp[O] : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
   | pgcl {while b {C'}} => ⟨fun X ↦ lfp (Ψ[wfp O C'] b X), ⋯⟩
   | pgcl {observe(b)}   => ⟨(i[b] * · + (1 - i[b])), ⋯⟩
   -- ... elided for brevity
   `;
-const wlpPrimeDef = `def wlp : pGCL Γ → ProbExp Γ →o ProbExp Γ
+const wlpPrimeDef = `def wlp[O] : pGCL Γ → ProbExp Γ →o ProbExp Γ
   wlp[O]⟦while b {C}⟧ f := gfp (pΨ[wlp[O]⟦C⟧] b f)
   wlp[O]⟦observe(b)⟧  f := p[b] * f
   `;
-const wlpDef = `def wlp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal] :=
+const wlpDef = `def wlp[O] : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal] :=
   fun C ↦ ⟨fun X ↦ wlp'[O]⟦C⟧ (X ⊓ 1), ⋯⟩`;
 const cwpDef = `
-def cwp : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
+def cwp[O] : pGCL Γ → 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]
   cwp[O]⟦C⟧ f := wp[O]⟦C⟧ f / wlp[O]⟦C⟧ 1
 `;
 
@@ -160,13 +160,14 @@ const ExpFig = ({ fault }: { fault: string }) => {
           color: "white",
           widthConstraint: { minimum: 20 },
         },
+        { x: 30, y: 65, label: "C", font: { size: 30 }, color: "transparent" },
       ]}
       edges={(
         [
           [1, 3, {}],
           [1, 2, {}],
           [2, 4, {}],
-          [2, 5, { label: "C", font: { size: 30 } }],
+          [2, 5, {}],
           [
             1,
             6,
@@ -186,13 +187,13 @@ const ExpFig = ({ fault }: { fault: string }) => {
   );
 };
 
-export const sExp = makeSlide(5, (step) => {
+export const sExp = makeSlide(4, (step) => {
   return (
-    <div className="flex justify-center flex-col items-center gap-10">
-      <div className="text-7xl flex whitespace-pre">
+    <div className="flex justify-center flex-col items-center gap-0">
+      <div className="text-7xl flex whitespace-pre mb-8">
         <AnimatePresence>
           <motion.span layout="position" className="text-center">
-            <H>Total expectation</H>
+            <H>Weakest Preexpectation</H>
           </motion.span>
         </AnimatePresence>
       </div>
@@ -231,9 +232,9 @@ export const sExp = makeSlide(5, (step) => {
           <InlineLeanCode src="Exp[⋯] " />
           {[
             "= fun σ ↦ ⨆ n : ℕ, ⨅ 𝒮 : Scheduler, EC (cost f) 𝒮 n conf[C, σ]",
-            "-- by definition \n= op[𝒟]⟦C⟧ f",
+            "-- by definition of the operational expectation transformer \n= op[𝒟]⟦C⟧ f",
             "-- by Lemma 27\n= (lfp ξ[𝒟])⟦C⟧ f",
-            "-- by Theorem 30\n= wp[𝒟]⟦C⟧ f",
+            // "-- by Theorem 30\n= wp[𝒟]⟦C⟧ f",
           ]
             .slice(0, step)
             .map((s, i) => (
@@ -249,18 +250,43 @@ export const sExp = makeSlide(5, (step) => {
 
 export const sExp2 = makeSlide(4, (step) => {
   return (
-    <div className="flex justify-center flex-col items-center gap-10">
-      <div className="text-7xl flex whitespace-pre">
+    <div className="flex justify-center flex-col items-center gap-0">
+      <div className="text-7xl flex whitespace-pre mb-8">
         <AnimatePresence>
           <motion.span layout="position" className="text-center">
-            <H>Total expectation (revisited)</H>
+            <H>Weakest Liberal Preexpectation</H>
           </motion.span>
         </AnimatePresence>
       </div>
-      <appear.div className="flex justify-center flex-col items-center gap-2">
+      {/* <appear.div className="flex justify-center flex-col items-center gap-2">
         <div className="text-3xl flex flex-col gap-4">
           <p>
             How should we handle <H>non-termination</H>?
+          </p>
+        </div>
+      </appear.div> */}
+      <appear.div className="flex justify-center flex-col items-center gap-2">
+        <div className="text-3xl flex flex-col gap-4">
+          <p>
+            <H>
+              <b>Given:</b>
+            </H>{" "}
+            a probabilistic program {tex`C : \pGCL`} and a post{" "}
+            <em>probabilistic</em> expectation {tex`f : \Mem \to \PReal`}.
+          </p>
+          <p>
+            <H>
+              <b>Running</b>
+            </H>{" "}
+            {tex`C`} on initial state {tex`\sigma : \Mem`} yields a
+            (sub-)distribution over final states.
+          </p>
+          <p>
+            <H>
+              <b>Question:</b>
+            </H>{" "}
+            What is the <H>expected probability</H> of {tex`f`} in{" "}
+            <em>terminated states</em> of {tex`C`}?
           </p>
         </div>
       </appear.div>
@@ -296,11 +322,12 @@ export const sExp2 = makeSlide(4, (step) => {
 
       <appear.div show={1 < step}>
         <appear.div className="grid grid-cols-[auto_80ch] text-2xl gap-x-4 gap-y-3">
-          <InlineLeanCode src="Exp[⋯] " />
+          <InlineLeanCode src="LiberalExp[⋯] " />
           {[
-            "= fun σ ↦ ⨆ n : ℕ, ⨅ 𝒮 : Scheduler, EC (cost f) 𝒮 n conf[C, σ] TODO",
+            "= fun σ ↦ ⨆ n : ℕ, ⨅ 𝒮, EC (cost f) 𝒮 n conf[C, σ] + Pr[𝒮](non-termination)",
             // "-- by definition \n= op[𝒟]⟦C⟧ f",
             // "-- by Lemma 27\n= (lfp ξ[𝒟])⟦C⟧ f",
+            "∈ ProbExp Γ",
             "= wlp[𝒟]⟦C⟧ f",
           ]
             .slice(0, step - 1)
@@ -325,21 +352,19 @@ def Ψ (g : 𝔼[Γ, ENNReal] →o 𝔼[Γ, ENNReal]) (φ : BExpr Γ) :
   ⟨fun f ↦ ⟨fun X ↦ i[φ] * g X + i[φᶜ] * f, ⋯⟩, ⋯⟩
   `}
   />,
-  <appear.div className="flex justify-center mt-4">
+  <appear.div className="flex flex-col items-center mt-4">
     <Callout title={<>Soundness of {tex`\wp{C}`}</>}>
       <div className="flex flex-col gap-2">
-        <p className="text-xl">Since loops are computed using {tex`\lfp`}</p>
-        <div className="px-8">
-          <InlineLeanCode
-            src={`wp[O]⟦while b {C}⟧ f = lfp (Ψ[wp[O]⟦C⟧] b f)`}
-          />
-        </div>
-        <p className="text-xl">we relate directly to {tex`ξ`}</p>
+        <p className="text-xl">We relate to {tex`\lfp ξ`}</p>
         <div className="px-8">
           <InlineLeanCode src={`wp[O]⟦C⟧ = (lfp ξ[O])⟦C⟧ = op[O]⟦C⟧`} />
         </div>
       </div>
     </Callout>
+    {/* <p className="text-xl mt-4">Since loops are computed using {tex`\lfp`}</p>
+    <div className="px-8">
+      <InlineLeanCode src={`wp[O]⟦while b {C}⟧ f = lfp (Ψ[wp[O]⟦C⟧] b f)`} />
+    </div> */}
   </appear.div>,
   // ...weakestPre.map(
   //   (wp, idx) => (delta: number) =>
@@ -368,7 +393,7 @@ export const s09 = makeSlide(steps.length + 1, () => {
       <div className="text-7xl flex whitespace-pre">
         <AnimatePresence>
           <motion.span layout="position" className="text-center">
-            <H>Weakest preexpectation</H>
+            <H>Weakest Preexpectation Transformer</H>
           </motion.span>
         </AnimatePresence>
       </div>
@@ -441,16 +466,26 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
   //   </div>
   // </>,
   (delta: number) =>
-    delta < 3 && (
-      <appear.div className="col-span-full flex justify-center my-6">
-        <Callout title="Problem!">
-          <p className="text-2xl">
+    delta < 5 && (
+      <appear.div className="col-span-full flex justify-center mb-6">
+        <Callout title="Challenge">
+          <p className="text-xl w-[50ch]">
             How do we relate {tex`\wlp{C}`} (which uses uses {tex`\gfp`}) to{" "}
             {tex`\lfp ξ`}?
           </p>
+          {0 < delta && (
+            <appear.p className="text-xl mt-1 w-[50ch]">
+              We introduce{" "}
+              <H>
+                Weakest <i>fault-tolerant</i> preexpectation
+              </H>
+              , morally <em>treating observations faults as assumptions</em>.
+            </appear.p>
+          )}
         </Callout>
       </appear.div>
     ),
+  null,
   <>
     <ExptDesc
       name={
@@ -468,8 +503,24 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
     </div>
   </>,
   (delta: number) =>
+    delta < 3 && (
+      <appear.div className="flex flex-col items-center">
+        <Callout title={<>Soundness of {tex`\wfp{C}`}</>}>
+          <div className="flex flex-col gap-2">
+            <p className="text-xl">We relate to {tex`\lfp ξ`}</p>
+            <div className="px-8">
+              <InlineLeanCode src={`wfp[O]⟦C⟧ = (lfp ξ[O])⟦C⟧ = op[O]⟦C⟧`} />
+            </div>
+            <p className="text-xl">
+              using a new <em>cost function</em>.
+            </p>
+          </div>
+        </Callout>
+      </appear.div>
+    ),
+  (delta: number) =>
     delta < 2 && (
-      <appear.div className="col-span-full flex justify-center my-6">
+      <appear.div className="col-span-3 flex justify-center">
         <Callout
           title={
             <>
@@ -478,31 +529,15 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
           }
         >
           <div className="flex flex-col gap-2">
-            <p className="text-xl">
-              Since {tex`\wfp{C}`} loops are computed using {tex`\lfp`}
-            </p>
+            <p className="text-xl">We relate to {tex`\wfp{C}`}</p>
             <div className="px-8">
-              <InlineLeanCode
-                src={`wfp[O]⟦while b {C}⟧ f = lfp (pΨ[wp[O]⟦C⟧] b f)`}
-              />
+              <InlineLeanCode src={identities.wlp_eq_wfp} />
             </div>
             <p className="text-xl">
-              we relate directly to {tex`ξ`} using a new <em>cost function</em>
-            </p>
-            <div className="px-8">
-              <InlineLeanCode src={`wfp[O]⟦C⟧ = (lfp ξ[O])⟦C⟧ = op[O]⟦C⟧`} />
-            </div>
-            <p className="text-xl">
-              with identity connecting {tex`\gfp`} and {tex`\lfp`}
+              using identity relating {tex`\gfp`} and {tex`\lfp`}
             </p>
             <div className="px-8">
               <InlineLeanCode src={identities.gfp_eq_lfp} />
-            </div>
-            <p className="text-xl">
-              now connect {tex`\wfp{C}`} and {tex`\wlp{C}`} using
-            </p>
-            <div className="px-8">
-              <InlineLeanCode src={identities.wlp_eq_wfp} />
             </div>
           </div>
         </Callout>
@@ -542,6 +577,22 @@ const zooSteps: (React.ReactNode | ((delta: number) => React.ReactNode))[] = [
       <LeanCode src={cwpDef} />
     </div>
   </>,
+  <appear.div className="flex flex-col items-center">
+    <Callout title={<>Interpretation of {tex`\cwp{C}`}</>}>
+      <div className="flex flex-col gap-2">
+        <p className="text-xl">Normalize by discarding faulted states.</p>
+      </div>
+    </Callout>
+  </appear.div>,
+  <appear.div className="col-span-3 flex flex-col items-center">
+    <Callout title={<>Soundness of {tex`\cwp{C}`}</>}>
+      <div className="flex flex-col gap-2">
+        <p className="text-xl">
+          Defined in terms of grounded expectation transformers.
+        </p>
+      </div>
+    </Callout>
+  </appear.div>,
 ];
 
 export const sZoo = makeSlide(zooSteps.length + 1, () => {

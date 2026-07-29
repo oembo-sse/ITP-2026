@@ -81,6 +81,7 @@ export const Katex: React.FC<{ src: string }> = ({ src }) => {
             "\\wp": "\\mathbf{\\H{wp}}\\llbracket#1\\rrbracket",
             "\\wlp": "\\mathbf{\\H{wlp}}\\llbracket#1\\rrbracket",
             "\\wfp": "\\mathbf{\\H{wfp}}\\llbracket#1\\rrbracket",
+            "\\cwp": "\\mathbf{\\H{cwp}}\\llbracket#1\\rrbracket",
             // "\\dwp": "\\mathbf{\\H{dwp}}\\llbracket#1\\rrbracket(#2)",
             "\\dwp": "\\mathbf{\\H{wp}}\\llbracket#1\\rrbracket(#2)",
             "\\HeyLo": "\\H{\\textbf{HeyLo}}",
